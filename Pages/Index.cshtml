@@ -1,10 +1,54 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Index page";
+    ViewData["Title"] = "Login Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="card mb-0">
+    <div class="card-body">
+        <h5 class="text-center">Welcome to Ecommerce - LTT</h5>
+        <form name="loginForm" id="loginForm" method="post">
+            <div class="mb-3">
+                <label for="usernameInput" class="form-label">Username</label>
+                <input type="text" class="form-control" name="username" id="usernameInput">
+            </div>
+            <div class="mb-4">
+                <label for="passwordInput" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" id="passwordInput">
+            </div>
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <a class="text-primary fw-bold" asp-area="" asp-page="/Index">Forgot Password ?</a>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 fs-4 mb-4 rounded-2" id="signInBtn">
+                <span class="spinner-grow spinner-grow-sm d-none" role="status" aria-hidden="true"></span>
+                <span id="signInLabel">Sign In</span>
+            </button>
+        </form>
+        @if (Model.GetResponseStatus() != null)
+        {
+            if (Model.GetResponseStatus().Status)
+            {
+                <div class="alert alert-success" role="alert">
+                    @Model.GetResponseStatus().Message
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-danger" role="alert">
+                    @Model.GetResponseStatus().Message
+                </div>
+            }
+        }
+    </div>
 </div>
+
+<script type="text/javascript">
+    const signInBtn = document.getElementById('signInBtn');
+    const signInLabel = document.getElementById('signInLabel');
+
+    signInBtn.addEventListener('click', () => {
+        signInBtn.classList.add('disabled');
+        signInLabel.textContent = 'Loading...';
+        signInBtn.querySelector('.spinner-grow').classList.remove('d-none');
+    });
+</script>

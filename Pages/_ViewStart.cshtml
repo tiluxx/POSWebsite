@@ -1,3 +1,12 @@
 ﻿@{
-    Layout = "_Layout";
+    string? routeUrl = ViewContext.RouteData.Values["Page"]?.ToString();
+    var authPages = new List<string> { "Auth" };
+    if (routeUrl != null && authPages.Any(routeUrl.Contains))
+    {
+        Layout = "_LayoutWorkspace";
+    }
+    else
+    {
+        Layout = "_Layout";
+    }
 }
