@@ -3,7 +3,12 @@
     var authPages = new List<string> { "Auth" };
     if (routeUrl != null && authPages.Any(routeUrl.Contains))
     {
-        Layout = "_LayoutWorkspace";
+        if (routeUrl.Contains("IndexFirstLogin")) {
+            Layout = "_Layout";
+        } else
+        {
+            Layout = "_LayoutWorkspace";
+        }
     }
     else
     {

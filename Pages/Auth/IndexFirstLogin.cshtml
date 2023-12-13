@@ -1,0 +1,58 @@
+﻿@page
+@model POSWebsite.Pages.Auth.IndexFirstLoginModel
+@{
+    ViewData["Title"] = "Create Password";
+}
+
+<div class="card mb-0">
+    <div class="card-body">
+        <h5 class="text-center">Welcome to Solution</h5>
+        <h6 class="text-center">You're required to create your own password'</h6>
+        <form name="changePwdForm" id="changePwdForm" method="post">
+            <div class="mb-">
+                <label for="passwordInput" class="form-label">Password</label>
+                <input type="password" class="form-control" name="Password" id="passwordInput">
+            </div>
+            <div class="mb-4">
+                <label for="ConfirmPasswordInput" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" name="ConfirmPassword" id="ConfirmPasswordInput">
+            </div>
+            <input type="hidden" value="@Model.GetCurUserEmail()" name="Email" />
+            @if (Model.GetResponseStatus() != null)
+            {
+                if (!Model.GetResponseStatus().Status)
+                {
+                    <div class="alert alert-danger w-100" role="alert">
+                        @Model.GetResponseStatus().Message
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-success w-100" role="alert">
+                        @Model.GetResponseStatus().Message
+                    </div>
+                }
+            }
+
+            <button type="submit" class="btn btn-primary w-100 fs-4 mb-4 rounded-2" id="changePwdBtn">
+                <span class="spinner-grow spinner-grow-sm d-none" role="status" aria-hidden="true"></span>
+                <span id="changePwdLabel">Change Password</span>
+            </button>
+            <p class="w-100 text-center"><small>Or log out the system</small></p>
+            <a asp-area=""
+               asp-page="/LogoutPage"
+               class="btn btn-outline-primary w-100 mt-2 d-block shadow-none">Log Out</a>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    const signInBtn = document.getElementById('changePwdBtn');
+    const signInLabel = document.getElementById('changePwdLabel');
+
+    signInBtn.addEventListener('click', () => {
+        signInBtn.classList.add('disabled');
+        signInLabel.textContent = 'Loading...';
+        signInBtn.querySelector('.spinner-grow').classList.remove('d-none');
+    });
+</script>

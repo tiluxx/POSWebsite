@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using POSWebsite.Models;
 using System.Diagnostics;
 
 namespace POSWebsite.Pages
@@ -13,15 +14,24 @@ namespace POSWebsite.Pages
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
         private readonly ILogger<ErrorModel> _logger;
+        private ResponseStatus _res;
 
         public ErrorModel(ILogger<ErrorModel> logger)
         {
             _logger = logger;
         }
 
-        public void OnGet()
+        public ResponseStatus GetResponseStatus()
         {
-            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+            return _res;
+        }
+
+        public void OnGet(bool Status, string Message)
+        {
+            if (Message != null)
+            {
+                _res = new ResponseStatus(Status, Message);
+            }
         }
     }
 }

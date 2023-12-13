@@ -6,7 +6,13 @@
         public string Message { get; set; }
         public string Data { get; set; }
 
-        public ResponseStatus(bool status, string message, string data = "")
+        public ResponseStatus(bool status, string message)
+        {
+            Status = status;
+            Message = message;
+        }
+
+        public ResponseStatus(bool status, string message, string data)
         {
             Status = status;
             Message = message;

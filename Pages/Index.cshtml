@@ -6,7 +6,7 @@
 
 <div class="card mb-0">
     <div class="card-body">
-        <h5 class="text-center">Welcome to Ecommerce - LTT</h5>
+        <h5 class="text-center">Welcome to Solution</h5>
         <form name="loginForm" id="loginForm" method="post">
             <div class="mb-3">
                 <label for="usernameInput" class="form-label">Username</label>
@@ -17,28 +17,29 @@
                 <input type="password" class="form-control" name="password" id="passwordInput">
             </div>
             <div class="d-flex align-items-center justify-content-between mb-4">
-                <a class="text-primary fw-bold" asp-area="" asp-page="/Index">Forgot Password ?</a>
+                <a class="text-primary fw-bold" asp-area="" asp-page="/Index">Forgot Password?</a>
             </div>
+            @if (Model.GetResponseStatus() != null)
+            {
+                if (!Model.GetResponseStatus().Status)
+                {
+                    <div class="alert alert-danger w-100" role="alert">
+                        @Model.GetResponseStatus().Message
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-success w-100" role="alert">
+                        @Model.GetResponseStatus().Message
+                    </div>
+                }
+            }
+            
             <button type="submit" class="btn btn-primary w-100 fs-4 mb-4 rounded-2" id="signInBtn">
                 <span class="spinner-grow spinner-grow-sm d-none" role="status" aria-hidden="true"></span>
                 <span id="signInLabel">Sign In</span>
             </button>
         </form>
-        @if (Model.GetResponseStatus() != null)
-        {
-            if (Model.GetResponseStatus().Status)
-            {
-                <div class="alert alert-success" role="alert">
-                    @Model.GetResponseStatus().Message
-                </div>
-            }
-            else
-            {
-                <div class="alert alert-danger" role="alert">
-                    @Model.GetResponseStatus().Message
-                </div>
-            }
-        }
     </div>
 </div>
 

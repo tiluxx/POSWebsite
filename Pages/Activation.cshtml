@@ -1,0 +1,26 @@
+﻿@page
+@model POSWebsite.Pages.ActivationPageModel
+@{
+    ViewData["Title"] = "Activation";
+}
+
+<div class="card mb-0">
+    <div class="card-body">
+        <p class="text-center">Welcome to Solution</p>
+        @if (Model.GetResponseStatus() != null)
+        {
+            if (Model.GetResponseStatus().Status)
+            {
+                <div class="alert alert-success" role="alert">
+                    @Model.GetResponseStatus().Message
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-danger" role="alert">
+                    @Model.GetResponseStatus().Message
+                </div>
+            }
+        }
+    </div>
+</div>

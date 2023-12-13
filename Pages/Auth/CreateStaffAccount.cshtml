@@ -1,0 +1,122 @@
+﻿@page
+@model CreateStaffAccountModel
+@{
+    ViewData["Title"] = "Create Staff Account";
+}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title fw-semibold mb-4">Forms</h5>
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    <div class="form-group mb-3">
+                        <label for="fullnameInput" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" name="Fullname" id="fullnameInput">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="emailInput" class="form-label">Email</label>
+                        <input type="text" class="form-control" name="Email" id="emailInput">
+                        <div id="emailHelp" class="form-text">This email is used to generate username</div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="phoneInput" class="form-label">Phone</label>
+                        <input type="text" class="form-control" name="TelNo" id="phoneInput">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="birthInput" class="form-label">Birthday</label>
+                        <input type="date" class="form-control" name="BirthDate" max="@DateOnly.FromDateTime(DateTime.Now)" id="birthInput">
+                    </div>
+                    <div class="form-group mb-3">
+                        <div>Gender</div>
+                        <div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="gender" value="Male" id="maleGender" checked>
+                                <label class="form-check-label" for="maleGender">
+                                    Male
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="gender" value="Female" id="femaleGender">
+                                <label class="form-check-label" for="femaleGender">
+                                    Female
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <div>Selected Roles</div>
+                        <div>
+                            <div class="form-check">
+                                <input type="checkbox" id="roleUser" name="roles" class="form-check-input" value="User" checked />
+                                <label for="roleUser" class="form-check-label">User</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="roleAdmin" name="roles" class="form-check-input" value="Admin" />
+                                <label for="roleAdmin" class="form-check-label">Admin</label>
+                            </div>
+                        </div>
+                    </div>
+                    @if (Model.GetResponseStatus() != null)
+                    {
+                        if (!Model.GetResponseStatus().Status)
+                        {
+                            <div class="alert alert-danger w-100" role="alert">
+                                @Model.GetResponseStatus().Message
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-success w-100" role="alert">
+                                @Model.GetResponseStatus().Message
+                            </div>
+                        }
+                    }
+                    <button type="submit" class="btn btn-primary" id="createAccountBtn">
+                        <span class="spinner-grow spinner-grow-sm d-none" role="status" aria-hidden="true"></span>
+                        <span id="createAccountLabel">Create account</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+@{
+    if (Model.GetResponseStatus() != null)
+    {
+        if (Model.GetResponseStatus().Status)
+        {
+            <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModal" aria-hidden="false">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title text-success fs-5" id="exampleModalLabel">Successfully</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            @Model.GetResponseStatus().Message
+                            <input type="hidden" name="itemId" id="itemIdInputHidden" />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+}
+
+
+<script type="text/javascript">
+    const signInBtn = document.getElementById('createAccountBtn');
+    const signInLabel = document.getElementById('createAccountLabel');
+
+    signInBtn.addEventListener('click', () => {
+        signInBtn.classList.add('disabled');
+        signInLabel.textContent = 'Creating...';
+        signInBtn.querySelector('.spinner-grow').classList.remove('d-none');
+    });
+</script>

@@ -1,20 +1,20 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using POSWebsite.Models;
 using System.Security.Claims;
 
-namespace POSWebsite.Pages
+namespace POSWebsite.Pages.Auth
 {
-    public class IndexModel : PageModel
+    public class IndexFirstLoginModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
+        private readonly ILogger<IndexFirstLoginModel> _logger;
         private ResponseStatus _res;
         private B2BDbContrext _dbContext;
+        private string _curUserEmail;
 
-        public IndexModel(ILogger<IndexModel> logger, B2BDbContrext dbContext)
+        public IndexFirstLoginModel(ILogger<IndexFirstLoginModel> logger, B2BDbContrext dbContext)
         {
             _logger = logger;
             _dbContext = dbContext;
@@ -25,45 +25,51 @@ namespace POSWebsite.Pages
             return _res;
         }
 
-        public void OnGet(bool Status, string Message)
+        public string GetCurUserEmail()
         {
+            return _curUserEmail;
+        }
+
+        public void OnGet(bool Status, string Message, string Data)
+        {
+            if (Data != null)
+            {
+                _curUserEmail = Data;
+            }
+
             if (Message != null)
             {
                 _res = new ResponseStatus(Status, Message);
             }
         }
 
-        public async Task<IActionResult> OnPost(string username, string password)
+        public async Task<IActionResult> OnPost(string Password, string ConfirmPassword, string Email)
         {
             if (!ModelState.IsValid)
             {
-                _res = new ResponseStatus(false, "Please enter all required information to log in.");
-                return RedirectToPage("/Index", _res);
+                _res = new ResponseStatus(false, "Please enter new password to log in.");
+                return RedirectToPage("/IndexFirstLogin", _res);
             }
 
-            Account? account = _dbContext.Account.Where(user => user.Username == username && user.Password == password).FirstOrDefault();
+            if (Password != ConfirmPassword)
+            {
+                _res = new ResponseStatus(false, "Password does not matched.");
+                return RedirectToPage("/IndexFirstLogin", _res);
+            }
+
+            Account? account = _dbContext.Account.Where(user => user.Email == Email).FirstOrDefault();
             if (account != null)
             {
-                if (!account.IsActivated)
-                {
-                    _res = new ResponseStatus(false, "Please login by clicking on the link in your email.");
-                    return RedirectToPage("/Index", _res);
-                }
+                account.Password = Password;
+                account.IsNewPasswordCreated = true;
+                await _dbContext.SaveChangesAsync();
 
-                if (account.Roles.Contains("Admin"))
-                {
-                    await SaveLogin(account);
-                    return Redirect("/Auth/Index");
-                }
-                else
-                {
-                    await SaveLogin(account);
-                    return Redirect("/Auth/Index");
-                }
+                await SaveLogin(account);
+                return Redirect("/Auth/Index");
             }
 
             _res = new ResponseStatus(false, "Account not found.");
-            return RedirectToPage("/Index", _res);
+            return RedirectToPage("/IndexFirstLogin", _res);
         }
 
         private async Task SaveLogin(Account account)

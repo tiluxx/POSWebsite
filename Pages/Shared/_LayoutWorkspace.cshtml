@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Ecommerce LTT</title>
+    <title>@ViewData["Title"] - Solution</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     @* <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> *@
     <link rel="stylesheet" href="~/DotNetTechWebFormProject.styles.css" asp-append-version="true" />
@@ -26,10 +26,6 @@
                 <!-- Sidebar navigation-->
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav" class="mb-4 pb-2">
-                        <li class="nav-small-cap">
-                            <i class="ti ti-dots nav-small-cap-icon fs-5"></i>
-                            <span class="hide-menu">Home</span>
-                        </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link sidebar-link primary-hover-bg"
                                asp-area=""
@@ -43,7 +39,29 @@
                         </li>
                         <li class="nav-small-cap">
                             <i class="ti ti-dots nav-small-cap-icon fs-5"></i>
-                            <span class="hide-menu">Item</span>
+                            <span class="hide-menu">Adminstrations</span>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link sidebar-link indigo-hover-bg"
+                               asp-area=""
+                               asp-page="/Auth/CreateStaffAccount"
+                               aria-expanded="false">
+                                <span class="aside-icon p-2 bg-light-indigo rounded-3">
+                                    <i class="ti ti-square-plus fs-7 text-indigo"></i>
+                                </span>
+                                <span class="hide-menu ms-2 ps-1">Create account</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link sidebar-link indigo-hover-bg"
+                               asp-area=""
+                               asp-page="/Auth/StaffManagement"
+                               aria-expanded="false">
+                                <span class="aside-icon p-2 bg-light-indigo rounded-3">
+                                    <i class="ti ti-square-plus fs-7 text-indigo"></i>
+                                </span>
+                                <span class="hide-menu ms-2 ps-1">Staff</span>
+                            </a>
                         </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link sidebar-link indigo-hover-bg"
@@ -53,29 +71,7 @@
                                 <span class="aside-icon p-2 bg-light-indigo rounded-3">
                                     <i class="ti ti-square-plus fs-7 text-indigo"></i>
                                 </span>
-                                <span class="hide-menu ms-2 ps-1">Add new item</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link sidebar-link indigo-hover-bg"
-                               asp-area=""
-                               asp-page="/Auth/ItemDashboard"
-                               aria-expanded="false">
-                                <span class="aside-icon p-2 bg-light-indigo rounded-3">
-                                    <i class="ti ti-building-store fs-7 text-indigo"></i>
-                                </span>
-                                <span class="hide-menu ms-2 ps-1">Item management</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link sidebar-link indigo-hover-bg"
-                               asp-area=""
-                               asp-page="/Auth/ItemFilter"
-                               aria-expanded="false">
-                                <span class="aside-icon p-2 bg-light-indigo rounded-3">
-                                    <i class="ti ti-filter fs-7 text-indigo"></i>
-                                </span>
-                                <span class="hide-menu ms-2 ps-1">Filter Item</span>
+                                <span class="hide-menu ms-2 ps-1">Products</span>
                             </a>
                         </li>
                         <li class="nav-small-cap">
@@ -85,23 +81,23 @@
                         <li class="sidebar-item">
                             <a class="sidebar-link sidebar-link primary-hover-bg"
                                asp-area=""
-                               asp-page="/Auth/CustomerManagement"
-                               aria-expanded="false">
-                                <span class="aside-icon p-2 bg-light-primary rounded-3">
-                                    <i class="ti ti-user-plus fs-7 text-primary"></i>
-                                </span>
-                                <span class="hide-menu ms-2 ps-1">Customer management</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link sidebar-link primary-hover-bg"
-                               asp-area=""
                                asp-page="/Auth/OrderManagement"
                                aria-expanded="false">
                                 <span class="aside-icon p-2 bg-light-primary rounded-3">
                                     <i class="ti ti-article fs-7 text-primary"></i>
                                 </span>
-                                <span class="hide-menu ms-2 ps-1">Order management</span>
+                                <span class="hide-menu ms-2 ps-1">Order</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link sidebar-link primary-hover-bg"
+                               asp-area=""
+                               asp-page="/Auth/CustomerManagement"
+                               aria-expanded="false">
+                                <span class="aside-icon p-2 bg-light-primary rounded-3">
+                                    <i class="ti ti-user-plus fs-7 text-primary"></i>
+                                </span>
+                                <span class="hide-menu ms-2 ps-1">Customer</span>
                             </a>
                         </li>
                         <li class="nav-small-cap">
@@ -116,7 +112,7 @@
                                 <span class="aside-icon p-2 bg-light-warning rounded-3">
                                     <i class="ti ti-login fs-7 text-warning"></i>
                                 </span>
-                                <span class="hide-menu ms-2 ps-1">Logout</span>
+                                <span class="hide-menu ms-2 ps-1">Log Out</span>
                             </a>
                         </li>
                     </ul>
@@ -155,7 +151,7 @@
                                     <div class="message-body">
                                         <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                                             <i class="ti ti-user fs-6"></i>
-                                            <p class="mb-0 fs-3">My Profile</p>
+                                            <p class="mb-0 fs-3">@User.Identity?.Name</p>
                                         </a>
                                         <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                                             <i class="ti ti-mail fs-6"></i>
@@ -167,7 +163,7 @@
                                         </a>
                                         <a asp-area=""
                                            asp-page="/LogoutPage"
-                                           class="btn btn-outline-primary mx-3 mt-2 d-block shadow-none">Logout</a>
+                                           class="btn btn-outline-primary mx-3 mt-2 d-block shadow-none">Log Out</a>
                                     </div>
                                 </div>
                             </li>
