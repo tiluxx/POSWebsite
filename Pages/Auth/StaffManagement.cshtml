@@ -1,0 +1,181 @@
+﻿@page
+@using Models
+@model POSWebsite.Pages.Auth.StaffManagementModel
+@{
+}
+
+@if (Model.GetResponseStatus() != null)
+{
+    if (!Model.GetResponseStatus().Status)
+    {
+        <div class="alert customize-alert alert-dismissible alert-danger fade show remove-close-icon" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="d-flex align-items-center font-medium me-3 me-md-0">
+                <i class="ti ti-info-circle fs-5 text-danger me-2"></i>
+                @Model.GetResponseStatus().Message
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert customize-alert alert-dismissible alert-success fade show remove-close-icon" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="d-flex align-items-center font-medium me-3 me-md-0">
+                <i class="ti ti-info-circle fs-5 text-success me-2"></i>
+                @Model.GetResponseStatus().Message
+            </div>
+        </div>
+    }
+}
+
+
+<div class="card mb-0">
+    <div class="card-body">
+        @if (Model.GetCurStaff() != null)
+        {
+            <div class="d-md-flex justify-content-between mb-10">
+                <div class="mb-10 mb-md-0">
+                    <h5 class="card-title">All staff</h5>
+                    <p class="card-subtitle mb-0">Branch: @Model.GetCurStaff().BranchName</p>
+                </div>
+                <div class="d-flex align-items-center">
+                    <form class="position-relative me-3 w-100">
+                        <input type="text" class="form-control search-chat py-2 ps-5" id="text-srh" placeholder="Search">
+                        <i class="ti ti-search position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i>
+                    </form>
+                    <div class="dropdown">
+                        <a href="#" class="btn border shadow-none px-3" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="ti ti-dots-vertical fs-5"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="">
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center gap-3" href="#"><i class="fs-4 ti ti-plus"></i>Add</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center gap-3" href="#"><i class="fs-4 ti ti-edit"></i>Edit</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center gap-3" href="#"><i class="fs-4 ti ti-trash"></i>Delete</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive overflow-x-auto latest-reviews-table">
+                <table class="table mb-0 align-middle text-nowrap">
+                    <thead class="text-dark fs-4">
+                        <tr>
+                            <th>Staff</th>
+                            <th>Position</th>
+                            <th>Gender</th>
+                            <th>Brithday</th>
+                            <th>Phone</th>
+                            <th>Activation</th>
+                            <th>Condition</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            foreach (StaffInfoHolder staff in Model.GetStaffListAtStore())
+                            {
+                                <tr>
+                                    <td>
+                                        <a asp-area=""
+                                           asp-page="/Auth/StaffDetail"
+                                           asp-route-email="@staff.StaffInfo.Email" 
+                                           class="d-flex align-items-center text-truncate">
+                                            <img src="@staff.StaffInfo.ProfilePictureUrl" alt="" class="img-fluid rounded-circle flex-shrink-0" width="32" height="32">
+                                            <div class="ms-7">
+                                                <h5 class="mb-1 fs-4">@staff.StaffInfo.Fullname</h5>
+                                                <h6 class="mb-0 fw-light">@staff.StaffInfo.Email</h6>
+                                            </div>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0">@staff.StaffInfo.Title</p>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0">@staff.StaffInfo.Gender</p>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0">@staff.StaffInfo.BirthDate.ToString("D")</p>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0">@staff.StaffInfo.TelNo</p>
+                                    </td>
+                                    <td>
+                                        @if (staff.AccountInfo.IsActivated)
+                                        {
+                                            <span class="badge rounded-pill bg-light-indigo text-indigo border-indigo border">
+                                                Activated
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge rounded-pill bg-light-warning text-warning border-warning border">
+                                                Unactived
+                                            </span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (!staff.AccountInfo.IsLocked)
+                                        {
+                                            <span class="badge rounded-pill bg-light-indigo text-indigo border-indigo border">
+                                                Available
+                                            </span>
+                                        } else
+                                        {
+                                            <span class="badge rounded-pill bg-light-warning text-warning border-warning border">
+                                                Locked
+                                            </span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="dropdown dropstart">
+                                            <a href="#" class="text-muted " id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ti ti-dots-vertical fs-5"></i>
+                                            </a>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
+                                                <li>
+                                                    <a asp-area=""
+                                                       asp-page="/Auth/StaffDetail"
+                                                       asp-route-email="@staff.StaffInfo.Email"
+                                                       class="dropdown-item d-flex align-items-center gap-3">
+                                                        <i class="fs-4 ti ti-eye"></i>View
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a asp-page-handler="LockOrUnlockStaffAccount"
+                                                       asp-route-email="@staff.StaffInfo.Email"
+                                                       class="dropdown-item d-flex align-items-center gap-3">
+                                                        @if (!staff.AccountInfo.IsLocked)
+                                                        {
+                                                            <i class="fs-4 ti ti-lock"></i>
+                                                            <span>Lock</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="fs-4 ti ti-lock-open"></i>
+                                                            <span>Unlock</span>
+                                                        }
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a asp-page-handler="ResendActivation"
+                                                       asp-route-email="@staff.StaffInfo.Email" class="dropdown-item d-flex align-items-center gap-3">
+                                                        <i class="fs-4 ti ti-send"></i>Resend activation link
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

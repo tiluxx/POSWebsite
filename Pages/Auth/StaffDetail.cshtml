@@ -1,0 +1,95 @@
+﻿@page
+@model POSWebsite.Pages.Auth.StaffDetailModel
+@{
+}
+
+<div class="position-relative overflow-hidden">
+    <div class="position-relative overflow-hidden rounded-3">
+        <img src="https://firebasestorage.googleapis.com/v0/b/b2b-solution-app.appspot.com/o/profilebg.jpg?alt=media&token=b5eba86b-c1bb-4163-9605-896db73ede58" alt="" class="w-100">
+    </div>
+    <div class="card mx-10 mt-n5">
+        <div class="card-body pb-0">
+            @if (Model.GetCurStaff() != null)
+            {
+                <div class="d-md-flex align-items-center justify-content-between text-center text-md-start mb-4">
+                    <div class="d-md-flex align-items-center">
+                        <div class="rounded-circle position-relative mb-10 mb-md-0 d-inline-block">
+                            <img src="@Model.GetCurStaff().StaffInfo.ProfilePictureUrl" alt="" class="rounded-circle img-fluid" width="100" height="100">
+                        </div>
+                        <div class="ms-0 ms-md-3 mb-10 mb-md-0">
+                            <div class="d-flex align-items-center justify-content-center justify-content-md-start mb-1">
+                                <h4 class="me-7 mb-0 fs-7">@Model.GetCurStaff().StaffInfo.Fullname</h4>
+                                <span class="badge fs-2 fw-bold rounded-pill bg-light-primary text-primary border-primary border">Admin</span>
+                            </div>
+                            <p class="fs-4 mb-1">@Model.GetCurStaff().StaffInfo.BranchName</p>
+                            <div class="d-flex align-items-center justify-content-center justify-content-md-start">
+                                <h6 class="mb-0">@Model.GetCurStaff().StaffInfo.Title</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@if (Model.GetCurStaff() != null)
+{
+    <div class="card ">
+        <div class="card-body p-4">
+            <div class="py-10">
+                <h5 class="mb-10">Personal Information</h5>
+                <div class="d-flex align-items-center mb-10">
+                    <div class="bg-light-danger text-danger fs-14 rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                        <i class="ti ti-phone"></i>
+                    </div>
+                    <div class="ms-7">
+                        <h6 class="mb-1">Birthday</h6>
+                        <p class="mb-0">@Model.GetCurStaff().StaffInfo.BirthDate.ToString("D")</p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center mb-10">
+                    <div class="bg-light-success text-success fs-14 rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                        <i class="ti ti-mail"></i>
+                    </div>
+                    <div class="ms-7">
+                        <h6 class="mb-1">Gender</h6>
+                        <p class="mb-0">@Model.GetCurStaff().StaffInfo.Gender</p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="bg-light-primary text-primary fs-14 rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                        <i class="ti ti-brand-skype"></i>
+                    </div>
+                    <div class="ms-7">
+                        <h6 class="mb-1">Joined Date</h6>
+                        <p class="mb-0">@Model.GetCurStaff().StaffInfo.DateJoined.ToString("D")</p>
+                    </div>
+                </div>
+            </div>
+            <div class="py-10 border-top">
+                <h5 class="mb-10">Contact</h5>
+                <div class="d-flex align-items-center mb-10">
+                    <div class="bg-light-danger text-danger fs-14 rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                        <i class="ti ti-phone"></i>
+                    </div>
+                    <div class="ms-7">
+                        <h6 class="mb-1">Phone</h6>
+                        <p class="mb-0">@Model.GetCurStaff().StaffInfo.TelNo</p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center mb-10">
+                    <div class="bg-light-success text-success fs-14 rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                        <i class="ti ti-mail"></i>
+                    </div>
+                    <div class="ms-7">
+                        <h6 class="mb-1">Email</h6>
+                        <p class="mb-0">@Model.GetCurStaff().StaffInfo.Email</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>

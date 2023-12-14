@@ -23,6 +23,7 @@ namespace POSWebsite.Models
         [AllowNull]
         public DateTime? TokenCreatedAt { get; set; }
         public bool IsNewPasswordCreated { get; set; }
+        public bool IsLocked { get; set; }
 
         public Staff Staff { get; set; }
     }

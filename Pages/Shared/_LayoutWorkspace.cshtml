@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string profileUrl = User.Claims.Where(c => c.Type == "Avatar").Select(c => c.Value).FirstOrDefault() ?? "~/images/profile/user1.jpg";
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -145,17 +148,19 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                                    aria-expanded="false">
-                                    <img src="~/images/profile/user1.jpg" alt="" width="35" height="35" class="rounded-circle">
+                                    <img src="@profileUrl" alt="" width="35" height="35" class="rounded-circle">
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                                     <div class="message-body">
-                                        <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                                        <a asp-area=""
+                                           asp-page="/Auth/MyProfile" class="d-flex align-items-center gap-2 dropdown-item">
                                             <i class="ti ti-user fs-6"></i>
                                             <p class="mb-0 fs-3">@User.Identity?.Name</p>
                                         </a>
-                                        <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                                        <a asp-area=""
+                                           asp-page="/Auth/MyProfile" class="d-flex align-items-center gap-2 dropdown-item">
                                             <i class="ti ti-mail fs-6"></i>
-                                            <p class="mb-0 fs-3">My Account</p>
+                                            <p class="mb-0 fs-3">My Profile</p>
                                         </a>
                                         <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                                             <i class="ti ti-list-check fs-6"></i>

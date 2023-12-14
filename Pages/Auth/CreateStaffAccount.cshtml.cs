@@ -42,6 +42,9 @@ namespace POSWebsite.Pages.Auth
             }
 
             // Create staff
+            string defaultMalePicture = "https://firebasestorage.googleapis.com/v0/b/b2b-solution-app.appspot.com/o/profile_pictures%2Fdefault_male.jpg?alt=media&token=29505c75-c857-467a-863c-06faf65183d5";
+            string defaultFemalePicture = "https://firebasestorage.googleapis.com/v0/b/b2b-solution-app.appspot.com/o/profile_pictures%2Fdefault_female.jpg?alt=media&token=f28e1736-5216-41de-ab2d-e6a3eb16ed19";
+
             Staff newStaff = new Staff()
             {
                 Fullname = Fullname,
@@ -53,7 +56,8 @@ namespace POSWebsite.Pages.Auth
                 Gender = Gender,
                 TelNo = TelNo,
                 Title = "Saleperson",
-                IsWorking = true
+                IsWorking = true,
+                ProfilePictureUrl = Gender == "Male" ? defaultMalePicture : defaultFemalePicture
             };
 
             bool isExisted = await _dbContext.Account.AnyAsync(staff => staff.Email == Email);
@@ -88,6 +92,7 @@ namespace POSWebsite.Pages.Auth
                 IsActivated = false,
                 TokenCreatedAt = DateTime.Now,
                 IsNewPasswordCreated = false,
+                IsLocked = false,
             };
             await _dbContext.Account.AddAsync(account);
             await _dbContext.SaveChangesAsync();

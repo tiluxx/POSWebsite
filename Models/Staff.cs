@@ -21,5 +21,6 @@ namespace POSWebsite.Models
         [Required]
         public string Email { get; set; }
         public bool IsWorking { get; set; }
+        public string ProfilePictureUrl { get; set; }
     }
 }
