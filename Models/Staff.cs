@@ -22,5 +22,7 @@ namespace POSWebsite.Models
         public string Email { get; set; }
         public bool IsWorking { get; set; }
         public string ProfilePictureUrl { get; set; }
+
+        public BranchStore BranchStore { get; set; }
     }
 }

@@ -17,9 +17,28 @@ namespace POSWebsite.Models
                     role => string.Join(",", role),
                     role => role.Split(",", StringSplitOptions.RemoveEmptyEntries).ToList()
                 ).HasColumnName("Roles");
+
+            modelBuilder.Entity<OrderDetail>().HasKey(sc => new { sc.OrderId, sc.ProductId });
+
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne<Order>(orderDetail => orderDetail.Order)
+                .WithMany(order => order.OrderDetails)
+                .HasForeignKey(orderDetail => orderDetail.OrderId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne<Product>(orderDetail => orderDetail.Product)
+                .WithMany(product => product.OrderDetails)
+                .HasForeignKey(orderDetail => orderDetail.OrderId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
 
-        public DbSet<Staff> Staff { get; set; }
         public DbSet<Account> Account { get; set; }
+        public DbSet<Customer> Customer { get; set; }
+        public DbSet<Product> Product { get; set; }
+        public DbSet<Order> Order { get; set; }
+        public DbSet<OrderDetail> OrderDetail { get; set; }
+        public DbSet<Staff> Staff { get; set; }
     }
 }
