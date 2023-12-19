@@ -15,6 +15,7 @@ namespace POSWebsite.Pages.Auth
         private B2BDbContrext _dbContext;
         private IWebHostEnvironment _environment;
         private Staff _curStaff;
+        private BranchStore _curBranchStore;
 
         public MyProfileModel(ILogger<MyProfileModel> logger, B2BDbContrext dbContext, IWebHostEnvironment webHostEnvironment)
         {
@@ -33,6 +34,11 @@ namespace POSWebsite.Pages.Auth
             return _curStaff;
         }
 
+        public BranchStore GetCurBranchStore()
+        {
+            return _curBranchStore;
+        }
+
         public void OnGet(bool Status, string Message)
         {
             if (Message != null)
@@ -47,6 +53,11 @@ namespace POSWebsite.Pages.Auth
                 if (staff != null)
                 {
                     _curStaff = staff;
+                    BranchStore? branch = _dbContext.BranchStore.Where(b => b.Id == staff.BranchStoreId).FirstOrDefault();
+                    if (branch != null)
+                    {
+                        _curBranchStore = branch;
+                    }
                 }
             }
         }
@@ -73,8 +84,11 @@ namespace POSWebsite.Pages.Auth
                     System.IO.File.Delete(file);
 
                     Staff? staff = _dbContext.Staff.Where(s => s.Email == curStaffEmail).FirstOrDefault();
-                    staff.ProfilePictureUrl = downloadUrl;
-                    await _dbContext.SaveChangesAsync();
+                    if (staff != null)
+                    {
+                        staff.ProfilePictureUrl = downloadUrl;
+                        await _dbContext.SaveChangesAsync();
+                    }
 
                     _res = new ResponseStatus(true, "New profile picture is updated");
                     return RedirectToPage("/Auth/MyProfile", _res);

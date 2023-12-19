@@ -1,7 +1,9 @@
 ﻿@page
+@using System.Security.Claims;
 @model POSWebsite.Pages.Auth.MyProfileModel
 @{
-
+    string role = User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).FirstOrDefault() ?? "User";
+}
 }
 
 <div class="position-relative overflow-hidden">
@@ -23,14 +25,13 @@
                         <div class="ms-0 ms-md-3 mb-10 mb-md-0">
                             <div class="d-flex align-items-center justify-content-center justify-content-md-start mb-1">
                                 <h4 class="me-7 mb-0 fs-7">@Model.GetCurStaff().Fullname</h4>
-                                <span class="badge fs-2 fw-bold rounded-pill bg-light-primary text-primary border-primary border">Admin</span>
+                                <span class="badge fs-2 fw-bold rounded-pill bg-light-primary text-primary border-primary border">@role</span>
                             </div>
-                            <p class="fs-4 mb-1">@Model.GetCurStaff().BranchName</p>
+                            <p class="fs-4 mb-1">@Model.GetCurBranchStore().BranchName</p>
                             <div class="d-flex align-items-center justify-content-center justify-content-md-start">
                                 <h6 class="mb-0">@Model.GetCurStaff().Title</h6>
                             </div>
-                        </div>
-                    </div>
+                        </div>                    </div>
                     <a asp-area=""
                        asp-page="/Auth/ChangePassword" class="btn btn-primary px-3 shadow-none">Change Password</a>
                 </div>

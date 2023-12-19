@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.Extensions.Hosting;
+using System.ComponentModel.DataAnnotations;
 
 namespace POSWebsite.Models
 {
@@ -13,5 +14,8 @@ namespace POSWebsite.Models
         [Required]
         public string TelNo { get; set; }
         public string Address { get; set; }
+        public DateTime CreationDate { get; set; }
+
+        public ICollection<Order> Orders { get; }
     }
 }

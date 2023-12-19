@@ -18,25 +18,57 @@ namespace POSWebsite.Models
                     role => role.Split(",", StringSplitOptions.RemoveEmptyEntries).ToList()
                 ).HasColumnName("Roles");
 
+            modelBuilder.Entity<Staff>()
+                .HasOne(staff => staff.BranchStore)
+                .WithMany(branch => branch.Staff)
+                .HasForeignKey(staff => staff.BranchStoreId);
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Customer)
+                .WithMany(o => o.Orders)
+                .HasForeignKey(o => o.CustomerId);
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.CreationLocation)
+                .WithMany(o => o.Orders)
+                .HasForeignKey(o => o.CreationLocationId);
+
+            modelBuilder.Entity<ProductBranch>().HasKey(sc => new { sc.BranchId, sc.ProductId });
+
+            modelBuilder.Entity<ProductBranch>()
+                .HasOne(productBranch => productBranch.BranchStore)
+                .WithMany(branchStore => branchStore.ProductBranches)
+                .HasForeignKey(productBranch => productBranch.BranchId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+
+            modelBuilder.Entity<ProductBranch>()
+                .HasOne(productBranch => productBranch.Product)
+                .WithMany(product => product.ProductBranches)
+                .HasForeignKey(productBranch => productBranch.ProductId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             modelBuilder.Entity<OrderDetail>().HasKey(sc => new { sc.OrderId, sc.ProductId });
 
             modelBuilder.Entity<OrderDetail>()
-                .HasOne<Order>(orderDetail => orderDetail.Order)
+                .HasOne(orderDetail => orderDetail.Order)
                 .WithMany(order => order.OrderDetails)
                 .HasForeignKey(orderDetail => orderDetail.OrderId)
                 .OnDelete(DeleteBehavior.NoAction);
 
 
             modelBuilder.Entity<OrderDetail>()
-                .HasOne<Product>(orderDetail => orderDetail.Product)
+                .HasOne(orderDetail => orderDetail.Product)
                 .WithMany(product => product.OrderDetails)
-                .HasForeignKey(orderDetail => orderDetail.OrderId)
+                .HasForeignKey(orderDetail => orderDetail.ProductId)
                 .OnDelete(DeleteBehavior.NoAction);
         }
 
         public DbSet<Account> Account { get; set; }
         public DbSet<Customer> Customer { get; set; }
+        public DbSet<BranchStore> BranchStore { get; set; }
         public DbSet<Product> Product { get; set; }
+        public DbSet<ProductBranch> ProductBranch { get; set; }
         public DbSet<Order> Order { get; set; }
         public DbSet<OrderDetail> OrderDetail { get; set; }
         public DbSet<Staff> Staff { get; set; }

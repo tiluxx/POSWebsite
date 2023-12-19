@@ -11,14 +11,12 @@ namespace POSWebsite.Pages.Auth
         private readonly ILogger<StaffDetailModel> _logger;
         private ResponseStatus _res;
         private B2BDbContrext _dbContext;
-        private IWebHostEnvironment _environment;
         private StaffInfoHolder _curStaff;
 
-        public StaffDetailModel(ILogger<StaffDetailModel> logger, B2BDbContrext dbContext, IWebHostEnvironment webHostEnvironment)
+        public StaffDetailModel(ILogger<StaffDetailModel> logger, B2BDbContrext dbContext)
         {
             _logger = logger;
             _dbContext = dbContext;
-            _environment = webHostEnvironment;
         }
 
         public ResponseStatus GetResponseStatus()
@@ -34,10 +32,11 @@ namespace POSWebsite.Pages.Auth
         public void OnGet(string email)
         {
             Staff? staff = _dbContext.Staff.Where(s => s.Email == email).FirstOrDefault();
-            Account? account = _dbContext.Account.Where(a => a.Email == email).FirstOrDefault();
             if (staff != null)
             {
-                _curStaff = new StaffInfoHolder() { StaffInfo = staff, AccountInfo = account };
+                Account? account = _dbContext.Account.Where(a => a.Email == email).FirstOrDefault();
+                BranchStore? branch = _dbContext.BranchStore.Where(b => b.Id == staff.BranchStoreId).FirstOrDefault();
+                _curStaff = new StaffInfoHolder() { StaffInfo = staff, AccountInfo = account, BranchStoreInfo = branch };
             }
         }
     }

@@ -1,0 +1,143 @@
+﻿@page
+@using Models
+@model POSWebsite.Pages.Auth.OrderDetailModel
+@{
+}
+
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card">
+            @if (Model.GetCurOrder() != null)
+            {
+                <div class="card-body">
+                    <div class="text-center">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/b2b-solution-app.appspot.com/o/profile_pictures%2Fanirudh-wKeZstqxKTQ-unsplash.jpg?alt=media&token=97aeb767-c4b3-4939-8ad1-51f098b711c0" width="110" class="rounded-3 mb-3" alt="">
+                        <h5 class="mb-1">Order @Model.GetCurOrder().Id</h5>
+                    </div>
+
+
+                    <div class="mt-5">
+                        <div class="pb-1 mb-2 border-bottom">
+                            <h6>Customer Details</h6>
+                        </div>
+
+                        <ul>
+                            <li class="py-2">
+                                <p class="fw-normal text-dark mb-0">
+                                    Name:
+                                    <span class="fw-light text-secondary ms-1">@Model.GetCurOrder().Customer.Fullname</span>
+                                </p>
+                            </li>
+
+                            <li class="py-2">
+                                <p class="fw-normal text-dark mb-0">
+                                    Phone:
+                                    <span class="fw-light text-secondary ms-1">@Model.GetCurOrder().Customer.TelNo</span>
+                                </p>
+                            </li>
+
+                            <li class="py-2">
+                                <p class="fw-normal text-dark mb-0">
+                                    Address:
+                                    <span class="fw-light text-secondary ms-1">@Model.GetCurOrder().DeliveryAddress</span>
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-5">
+                        <div class="pb-1 mb-2 border-bottom">
+                            <h6>Order Details</h6>
+                        </div>
+
+                        <ul>
+                            <li class="py-2">
+                                <p class="fw-normal text-dark mb-0">
+                                    Total Bill:
+                                    <span class="fw-light text-secondary ms-1">@Model.GetCurOrder().TotalBill</span>
+                                </p>
+                            </li>
+
+                            <li class="py-2">
+                                <p class="fw-normal text-dark mb-0">
+                                    Discount:
+                                    <span class="fw-light text-secondary ms-1">@Model.GetCurOrder().Discount</span>
+                                </p>
+                            </li>
+
+                            <li class="py-2">
+                                <p class="fw-normal text-dark mb-0">
+                                    Final Bill:
+                                    <span class="fw-light text-secondary ms-1">@Model.GetCurOrder().ActualBill</span>
+                                </p>
+                            </li>
+                            <li class="py-2">
+                                <p class="fw-normal text-dark mb-0">
+                                    Creadted Date:
+                                    <span class="fw-light text-secondary ms-1">@Model.GetCurOrder().CreationDate.ToString("f")</span>
+                                </p>
+                            </li>
+                            <li class="py-2">
+                                <p class="fw-normal text-dark mb-0">
+                                    Store Branch:
+                                    <span class="fw-light text-secondary ms-1">@Model.GetCurOrder().CreationLocation.BranchName</span>
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card w-100">
+            <div class="card-body">
+                @if (Model.GetCurOrder() != null)
+                {
+                    <div class="table-responsive overflow-x-auto products-tabel">
+                        <table class="table text-nowrap customize-table mb-0 align-middle">
+                            <thead class="text-dark fs-4">
+                                <tr>
+                                    <th>Products</th>
+                                    <th>Quanity</th>
+                                    <th>Discount</th>
+                                    <th>Final Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (OrderDetail orderDetail in Model.GetOrderDetails())
+                                    {
+                                        Decimal actualTotal = orderDetail.Quantity * orderDetail.ActualUnitPrice;
+                                        <tr>
+                                            <td class="ps-0">
+                                                <div class="d-flex align-items-center product text-truncate">
+                                                    <img src="../../dist/images/products/product-5.png" class="img-fluid flex-shrink-0" width="60" height="60">
+                                                    <div class="ms-3 product-title">
+                                                        <h6 class="fs-4 mb-0 text-truncate-2">@orderDetail.Product.ProductName</h6>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <p class="mb-0">@orderDetail.Quantity</p>
+                                            </td>
+                                            <td>
+                                                <span class="badge rounded-pill bg-light-success text-success border-success border">
+                                                    -@orderDetail.Discount%
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <p class="mb-0">@actualTotal</p>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

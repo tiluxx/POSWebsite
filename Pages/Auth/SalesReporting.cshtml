@@ -1,0 +1,387 @@
+﻿@page
+@using Models
+@model POSWebsite.Pages.Auth.SalesReportingModel
+@{
+    ViewData["Title"] = "Sales Reporting";
+}
+
+<div class="card mb-3 d-none d-lg-block">
+    <div class="card-body px-4 py-3">
+        <form asp-page-handler="ViewSalesReport" method="post">
+            <div class="d-flex align-items-center">
+                <p class="mb-0">Timelines:</p>
+                <div class="dropdown border-end">
+                    <div class="px-4">
+                        <select class="form-select" name="TimelineSelection" id="timeline-selection">
+                            <option value="today">Today</option>
+                            <option value="yesterday">Yesterday</option>
+                            <option value="last7Days">Last 7 days</option>
+                            <option value="thisMonth">This month</option>
+                            <option value="fromDateToDate">In Period of Year</option>
+                            <option value="quarter">In Quarter of Year</option>
+                            <option value="year">In Year</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="dropdown border-end" id="quarter-select-group">
+                    <div class="input-group px-4">
+                        <select class="form-select w-auto" name="QuarterSelection">
+                            <option value="1" selected>Q1</option>
+                            <option value="2">Q2</option>
+                            <option value="3">Q3</option>
+                            <option value="4">Q4</option>
+                        </select>
+                        <select class="form-select w-auto" name="QuarterYearSelection">
+                            @{
+
+                                int earliestYear = 2000;
+                                for (int currentYear = DateTime.Now.Year; currentYear >= earliestYear; currentYear--)
+                                {
+                                    <option value="2022">@currentYear</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="dropdown border-end" id="year-select-group">
+                    <div class="px-4">
+                        <select class="form-select w-auto" name="YearSelection">
+                            @{
+
+                                earliestYear = 2000;
+                                for (int currentYear = DateTime.Now.Year; currentYear >= earliestYear; currentYear--)
+                                {
+                                    <option value="2022">@currentYear</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="dropdown" id="date-select-group">
+                    <div class="input-group px-4">
+                        <input class="form-control" type="date" name="FromDate" value="@DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd")">
+                        <input class="form-control" type="date" name="ToDate" value="@DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd")">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary rounded-pill">
+                    Report
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (Model.GetResponseStatus() != null)
+{
+    <div class="row">
+        <div class="col-lg-6 d-flex align-items-stretch">
+            <div class="card w-100">
+                <div class="card-body border-bottom position-relative">
+                    <h5 class="card-title fs-6 mb-1">Congratulations Jonathan</h5>
+                    <p class="mb-0">You have done 38% more sales</p>
+                    <div class="mt-6">
+                        <ul class="list-unstyled mb-0">
+                            <li class="d-flex align-items-center mb-10">
+                                <div class="bg-light-success p-7 me-3 rounded-circle d-flex align-items-center justify-content-center">
+                                    <iconify-icon icon="solar:cart-5-line-duotone" class="fs-7 text-success"></iconify-icon>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1 fs-4">64 new orders</h6>
+                                    <p class="mb-0">Processing</p>
+                                </div>
+                            </li>
+                            <li class="d-flex align-items-center mb-10">
+                                <div class="bg-light-warning p-7 me-3 rounded-circle d-flex align-items-center justify-content-center">
+                                    <iconify-icon icon="solar:pause-line-duotone" class="fs-6 text-warning"></iconify-icon>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1 fs-4">4 orders</h6>
+                                    <p class="mb-0">On hold</p>
+                                </div>
+                            </li>
+                            <li class="d-flex align-items-center">
+                                <div class="bg-light-indigo p-7 me-3 rounded-circle d-flex align-items-center justify-content-center">
+                                    <iconify-icon icon="solar:bicycling-round-bold-duotone" class="fs-7 text-indigo"></iconify-icon>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1 fs-4">12 orders</h6>
+                                    <p class="mb-0">Delivered</p>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="man-working-on-laptop">
+                            <img src="../../dist/images/background/man-working-on-laptop.png" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body pb-2">
+                    <div class="d-flex align-items-baseline justify-content-between">
+                        <div>
+                            <h5 class="card-title fs-6 mb-1">Total Orders</h5>
+                            <p class="mb-0">Weekly order updates</p>
+                        </div>
+                        <select class="form-select fw-bold w-auto shadow-none">
+                            <option value="1">This Week</option>
+                            <option value="2">April 2023</option>
+                            <option value="3">May 2023</option>
+                            <option value="4">June 2023</option>
+                        </select>
+                    </div>
+                    <div id="netsells" style="min-height: 275px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 d-flex align-items-stretch">
+            <div class="row">
+                <div class="col-sm-6 d-flex align-items-stretch">
+                    <div class="card w-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="card-title mb-1 fw-semibold">Amounts</h5>
+                                    <p class="mb-0">@Model.GetResponseStatus().SalesReport.TypeOfTimeline</p>
+                                </div>
+                                <div>
+                                    <h5 class="card-title mb-1 fw-semibold text-end">@Model.GetResponseStatus().SalesReport.TotalAmount</h5>
+                                    <span class="badge rounded-pill bg-light-warning text-warning border-warning border text-end">-3.8%</span>
+                                </div>
+                            </div>
+                            <div id="total-orders" class="total-orders-chart my-1" style="min-height: 165px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 d-flex align-items-stretch">
+                    <div class="card w-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="card-title fw-semibold mb-1">Products</h5>
+                                    <p class="mb-0">@Model.GetResponseStatus().SalesReport.TypeOfTimeline</p>
+                                </div>
+                                <div>
+                                    <h5 class="card-title mb-1 fw-semibold text-end">@Model.GetResponseStatus().SalesReport.TotalProducts</h5>
+                                    <span class="badge rounded-pill bg-light-success text-success border-success border text-end">+26.5%</span>
+                                </div>
+                            </div>
+                            <div id="products" class="my-8" style="min-height: 148.7px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 d-flex align-items-stretch">
+                    <div class="card w-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="card-title mb-1">Orders</h5>
+                                    <p class="mb-0">@Model.GetResponseStatus().SalesReport.TypeOfTimeline</p>
+                                </div>
+                                <div>
+                                    <h5 class="card-title mb-1 text-end">@Model.GetResponseStatus().SalesReport.TotalOrders</h5>
+                                    <span class="badge rounded-pill bg-light-success text-success border-success border text-end">+26.5%</span>
+                                </div>
+                            </div>
+                            <div id="customers" class="my-5" style="min-height: 103px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 d-flex align-items-stretch">
+                    <div class="card w-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="card-title mb-1">Customers</h5>
+                                    <p class="mb-0">@Model.GetResponseStatus().SalesReport.TypeOfTimeline</p>
+                                </div>
+                                <div>
+                                    <h5 class="card-title mb-1 text-end">@Model.GetResponseStatus().SalesReport.TotalCustomers</h5>
+                                    <span class="badge rounded-pill bg-light-success text-success border-success border text-end">+26.5%</span>
+                                </div>
+                            </div>
+                            <div id="customers" class="my-5" style="min-height: 103px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-0">
+                <div class="card-body">
+                    <div class="d-md-flex justify-content-between mb-10">
+                        <div class="mb-10 mb-md-0">
+                            <h5 class="card-title">List of orders</h5>
+                            <p class="card-subtitle mb-0">Orders in the current timelines</p>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <form class="position-relative me-3 w-100">
+                                <input type="text" class="form-control search-chat py-2 ps-5" id="text-srh" placeholder="Search">
+                                <i class="ti ti-search position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i>
+                            </form>
+                            <div class="dropdown">
+                                <a href="#" class="btn border shadow-none px-3" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="ti ti-dots-vertical fs-5"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="">
+                                    <li>
+                                        <a class="dropdown-item d-flex align-items-center gap-3" href="#"><i class="fs-4 ti ti-plus"></i>Add</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item d-flex align-items-center gap-3" href="#"><i class="fs-4 ti ti-edit"></i>Edit</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item d-flex align-items-center gap-3" href="#"><i class="fs-4 ti ti-trash"></i>Delete</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive overflow-x-auto latest-reviews-table">
+                        <table class="table mb-0 align-middle text-nowrap">
+                            <thead class="text-dark fs-4">
+                                <tr>
+                                    <th>Order Code</th>
+                                    <th>Customer</th>
+                                    <th>Total</th>
+                                    <th>Discount</th>
+                                    <th>Final Payment</th>
+                                    <th>Created Date</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (Order order in Model.GetResponseStatus().SalesReport.Orders)
+                                {
+                                    <tr>
+                                        <td>
+                                            <p class="mb-0">Order @order.Id</p>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center text-truncate">
+                                                <img src="https://firebasestorage.googleapis.com/v0/b/b2b-solution-app.appspot.com/o/profile_pictures%2Fdefault_female.jpg?alt=media&token=f28e1736-5216-41de-ab2d-e6a3eb16ed19" alt="" class="img-fluid rounded-circle flex-shrink-0" width="32" height="32">
+                                                <div class="ms-7">
+                                                    <h5 class="mb-1 fs-4">@order.Customer.Fullname</h5>
+                                                    <h6 class="mb-0 fw-light">@order.Customer.TelNo</h6>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <p class="mb-0">$@order.TotalBill</p>
+                                        </td>
+                                        <td>
+                                            <span class="badge rounded-pill bg-light-success text-success border-success border">
+                                                -@order.Discount%
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <p class="mb-0">$@order.ActualBill</p>
+                                        </td>
+                                        <td>
+                                            <p class="mb-0">@order.CreationDate.ToString("R")</p>
+                                        </td>
+                                        <td>
+                                            <div class="dropdown dropstart">
+                                                <a href="#" class="text-muted " id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="ti ti-dots-vertical fs-5"></i>
+                                                </a>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
+                                                    <li>
+                                                        <a asp-area=""
+                                                           asp-page="/Auth/OrderDetail"
+                                                           asp-route-id="@order.Id" class="dropdown-item d-flex align-items-center gap-3"><i class="fs-6 ti ti-eye"></i>View</a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item d-flex align-items-center gap-3" href="#"><i class="fs-6 ti ti-edit"></i>Edit</a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item d-flex align-items-center gap-3" href="#"><i class="fs-6 ti ti-trash"></i>Delete</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    const yearSelection = document.getElementById("year-selection");
+    const timelineSelection = document.getElementById("timeline-selection");
+    const quarterSelectGroup = document.getElementById("quarter-select-group");
+    const dateSelectGroup = document.getElementById("date-select-group");
+    const yearSelectGroup = document.getElementById("year-select-group");
+
+    let currentYear = new Date().getFullYear();
+    let earliestYear = 2000;
+
+    while (currentYear >= earliestYear) {
+        let dateOption = document.createElement("option");
+        dateOption.text = currentYear;
+        dateOption.value = currentYear;
+        dateDropdown.add(dateOption);
+        currentYear -= 1;
+    }
+
+    timelineSelection.addEventListener("click", () => {
+        switch (timelineSelection.value {
+            case "fromDateToDate":
+                quarterSelectGroup.classList.add("d-none")
+                yearSelectGroup.classList.add("d-none")
+                dateSelectGroup.classList.remove("d-none")
+                break;
+            case "quarter":
+                dateSelectGroup.classList.add("d-none")
+                yearSelectGroup.classList.add("d-none")
+                quarterSelectGroup.classList.remove("d-none")
+                break;
+            case "year":
+                quarterSelectGroup.classList.add("d-none")
+                dateSelectGroup.classList.add("d-none")
+                yearSelectGroup.classList.remove("d-none")
+                break;
+            default:
+                break;
+        }
+    })
+
+    /*$('#timeline-selection').on('change', function () {
+        let selection = $(this).val();
+        console.log(selection)
+        switch (selection) {
+            case "today":
+            case "yesterday":
+            case "last7Days":
+            case "thisMonth":
+                $("#quarter-select-group").hide()
+                $("#date-select-group").hide()
+                $("year-select-group").hide()
+                break;
+            case "fromDateToDate":
+                $("#quarter-select-group").hide()
+                $("year-select-group").hide()
+                $("#date-select-group").show()
+                break;
+            case "quarter":
+                $("#date-select-group").hide()
+                $("year-select-group").hide()
+                $("#quarter-select-group").show()
+                break;
+            case "year":
+                $("#quarter-select-group").hide()
+                $("#date-select-group").hide()
+                $("year-select-group").show()
+                break;
+            default:
+                $("#quarter-select-group").hide()
+                $("#date-select-group").hide()
+                $("year-select-group").hide()
+        }
+    });*/
+</script>

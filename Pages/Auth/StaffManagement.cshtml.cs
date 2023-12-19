@@ -15,6 +15,7 @@ namespace POSWebsite.Pages.Auth
         private B2BDbContrext _dbContext;
         private IWebHostEnvironment _environment;
         private Staff _curStaff;
+        private BranchStore _curBranchStore;
         private List<StaffInfoHolder> _staffListAtStore;
 
         public StaffManagementModel(ILogger<StaffManagementModel> logger, B2BDbContrext dbContext, IWebHostEnvironment webHostEnvironment)
@@ -32,6 +33,11 @@ namespace POSWebsite.Pages.Auth
         public Staff GetCurStaff()
         {
             return _curStaff;
+        }
+
+        public BranchStore GetCurBranchStore()
+        {
+            return _curBranchStore;
         }
 
         public List<StaffInfoHolder> GetStaffListAtStore()
@@ -53,8 +59,14 @@ namespace POSWebsite.Pages.Auth
                 Staff? staff = _dbContext.Staff.Where(s => s.Email == claims.Value).FirstOrDefault();
                 if (staff != null)
                 {
+                    BranchStore? branchStore = _dbContext.BranchStore.Where(branch => branch.Id == staff.BranchStoreId).FirstOrDefault();
+                    if (branchStore != null)
+                    {
+                        _curBranchStore = branchStore;
+                    }
+
                     _curStaff = staff;
-                    List<Staff> staffList = _dbContext.Staff.Where(s => s.BranchName == staff.BranchName).ToList();
+                    List<Staff> staffList = _dbContext.Staff.Where(s => s.BranchStoreId == staff.BranchStoreId).ToList();
                     foreach (Staff staffAtStore in staffList)
                     {
                         Account? account = _dbContext.Account.Where(s => s.Email == staffAtStore.Email).FirstOrDefault();

@@ -1,0 +1,185 @@
+﻿@page
+@using Models
+@model POSWebsite.Pages.HeadQuarter.InventoryReportingModel
+@{
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card mb-3">
+            <div class="card-body px-4 py-3">
+                @if (Model.GetBranches() != null)
+                {
+                    <form asp-page-handler="ViewAgentIntentory" method="post">
+                        <div class="d-flex align-items-center">
+                            <p class="mb-0">Agent's Retail Store:</p>
+                            <div class="dropdown">
+                                <div class="px-4">
+                                    <select class="form-select" name="AgentSelection" id="agent-selection">
+                                        <option value="-1" selected>All Agents</option>
+                                        @foreach (BranchStore branch in Model.GetBranches())
+                                        {
+                                            <option value="@branch.Id">@branch.BranchName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary rounded-pill">
+                                View Inventory
+                            </button>
+                        </div>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="card mb-0">
+            <div class="card-body">
+                @if (Model.GetInventories() != null)
+                {
+                    <div class="d-md-flex justify-content-between mb-10">
+                        <div class="mb-10 mb-md-0">
+                            @if (Model.GetInventories().First()?.Branch != null)
+                            {
+                                <h5 class="card-title">Inventory At @Model.GetInventories().First()?.Branch.BranchStore.BranchName</h5>
+                            } else
+                            {
+                                <h5 class="card-title">Inventory At All Agents</h5>
+                            }
+                            <p class="card-subtitle mb-0">Current inventory health</p>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <form class="position-relative me-3 w-100">
+                                <input type="text" class="form-control search-chat py-2 ps-5" id="text-srh" placeholder="Search">
+                                <i class="ti ti-search position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i>
+                            </form>
+                            <div class="dropdown">
+                                <a href="#" class="btn border shadow-none px-3" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="ti ti-dots-vertical fs-5"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="">
+                                    <li>
+                                        <a class="dropdown-item d-flex align-items-center gap-3" href="#"><i class="fs-4 ti ti-plus"></i>Add</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item d-flex align-items-center gap-3" href="#"><i class="fs-4 ti ti-edit"></i>Edit</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item d-flex align-items-center gap-3" href="#"><i class="fs-4 ti ti-trash"></i>Delete</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive overflow-x-auto latest-reviews-table">
+                        <table class="table mb-0 align-middle text-nowrap">
+                            <thead class="text-dark fs-4">
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Name</th>
+                                    <th>Barcode</th>
+                                    <th>RetailPrice</th>
+                                    <th>Condition</th>
+                                    <th>Available At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (Inventory inventory in Model.GetInventories())
+                                    {
+                                        bool isProductAvailable = Model.GetInventories().Count() > 0;
+                                        <tr>
+                                            <td>
+                                                <p class="mb-0">Product @inventory.Product.Id</p>
+                                            </td>
+                                            <td>
+                                                <p class="mb-0">@inventory.Product.ProductName</p>
+                                            </td>
+                                            <td>
+                                                <p class="mb-0">@inventory.Product.Barcode</p>
+                                            </td>
+                                            <td>
+                                                <p class="mb-0">$@inventory.Product.RetailPrice</p>
+                                            </td>
+                                            <td>
+                                                @if (isProductAvailable)
+                                                {
+                                                    <span class="badge rounded-pill bg-light-success text-success border-success border">
+                                                        Available
+                                                    </span>
+                                                } else
+                                                {
+                                                    <span class="badge rounded-pill bg-light-warning text-warning border-warning border">
+                                                        Out of order
+                                                    </span>
+                                                }
+
+                                            </td>
+                                            <td>
+                                                <div class="dropdown dropstart">
+                                                    <button class="btn btn-light-success btn-outline-success rounded-pill" type="button" id="availableBranchesMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="ti ti-building-store fs-5"></i> Available Branch
+                                                    </button>
+                                                    <ul class="dropdown-menu" aria-labelledby="availableBranchesMenuButton" style="">
+                                                        @{
+                                                            if (inventory.Branches != null)
+                                                            {
+                                                                foreach (ProductBranch productBranch in inventory.Branches)
+                                                                {
+                                                                    string productConditionAtBranch = $"{productBranch.BranchStore.BranchName}: {productBranch.Quantity} left";
+                                                                    if (productBranch.BranchStore.IsHeadCompany)
+                                                                    {
+                                                                        <li>
+                                                                            <a class="dropdown-item d-flex align-items-center gap-3" href="#">
+                                                                                <i class="fs-6 ti ti-building-warehouse"></i>
+                                                                                @productConditionAtBranch
+                                                                            </a>
+                                                                        </li>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <li>
+                                                                            <a class="dropdown-item d-flex align-items-center gap-3" href="#">
+                                                                                @productConditionAtBranch
+                                                                            </a>
+                                                                        </li>
+                                                                    }
+                                                                }
+                                                            } else if (inventory.Branch != null)
+                                                            {
+                                                                string productConditionAtBranch = $"{inventory.Branch.BranchStore.BranchName}: {inventory.Branch.Quantity} left";
+                                                                if (inventory.Branch.BranchStore.IsHeadCompany)
+                                                                {
+                                                                    <li>
+                                                                        <a class="dropdown-item d-flex align-items-center gap-3" href="#">
+                                                                            <i class="fs-6 ti ti-building-warehouse"></i>
+                                                                            @productConditionAtBranch
+                                                                        </a>
+                                                                    </li>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <li>
+                                                                        <a class="dropdown-item d-flex align-items-center gap-3" href="#">
+                                                                            @productConditionAtBranch
+                                                                        </a>
+                                                                    </li>
+                                                                }
+                                                            }
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

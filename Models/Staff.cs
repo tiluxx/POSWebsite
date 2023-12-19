@@ -23,6 +23,7 @@ namespace POSWebsite.Models
         public bool IsWorking { get; set; }
         public string ProfilePictureUrl { get; set; }
 
+        public int BranchStoreId { get; set; }
         public BranchStore BranchStore { get; set; }
     }
 }

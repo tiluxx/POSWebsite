@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using POSWebsite.Models;
 
@@ -11,9 +12,11 @@ using POSWebsite.Models;
 namespace POSWebsite.Migrations
 {
     [DbContext(typeof(B2BDbContrext))]
-    partial class B2BDbContrextModelSnapshot : ModelSnapshot
+    [Migration("20231218171720_UpdateOrderDetailProductFK")]
+    partial class UpdateOrderDetailProductFK
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -330,13 +333,13 @@ namespace POSWebsite.Migrations
             modelBuilder.Entity("POSWebsite.Models.Order", b =>
                 {
                     b.HasOne("POSWebsite.Models.BranchStore", "CreationLocation")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("CreationLocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("POSWebsite.Models.Customer", "Customer")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -387,7 +390,7 @@ namespace POSWebsite.Migrations
             modelBuilder.Entity("POSWebsite.Models.Staff", b =>
                 {
                     b.HasOne("POSWebsite.Models.BranchStore", "BranchStore")
-                        .WithMany("Staff")
+                        .WithMany()
                         .HasForeignKey("BranchStoreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -397,16 +400,7 @@ namespace POSWebsite.Migrations
 
             modelBuilder.Entity("POSWebsite.Models.BranchStore", b =>
                 {
-                    b.Navigation("Orders");
-
                     b.Navigation("ProductBranches");
-
-                    b.Navigation("Staff");
-                });
-
-            modelBuilder.Entity("POSWebsite.Models.Customer", b =>
-                {
-                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("POSWebsite.Models.Order", b =>

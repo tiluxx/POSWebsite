@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using POSWebsite.Models;
 
@@ -11,9 +12,11 @@ using POSWebsite.Models;
 namespace POSWebsite.Migrations
 {
     [DbContext(typeof(B2BDbContrext))]
-    partial class B2BDbContrextModelSnapshot : ModelSnapshot
+    [Migration("20231218080849_ModifyCreationDateForCustomer")]
+    partial class ModifyCreationDateForCustomer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -193,8 +196,6 @@ namespace POSWebsite.Migrations
 
                     b.HasKey("OrderId", "ProductId");
 
-                    b.HasIndex("ProductId");
-
                     b.ToTable("OrderDetail");
                 });
 
@@ -209,6 +210,9 @@ namespace POSWebsite.Migrations
                     b.Property<string>("Barcode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("BranchStoreId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Category")
                         .IsRequired()
@@ -228,6 +232,9 @@ namespace POSWebsite.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("RetailPrice")
                         .HasColumnType("decimal(18,2)");
 
@@ -237,25 +244,9 @@ namespace POSWebsite.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BranchStoreId");
+
                     b.ToTable("Product");
-                });
-
-            modelBuilder.Entity("POSWebsite.Models.ProductBranch", b =>
-                {
-                    b.Property<int>("BranchId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("BranchId", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProductBranch");
                 });
 
             modelBuilder.Entity("POSWebsite.Models.Staff", b =>
@@ -330,13 +321,13 @@ namespace POSWebsite.Migrations
             modelBuilder.Entity("POSWebsite.Models.Order", b =>
                 {
                     b.HasOne("POSWebsite.Models.BranchStore", "CreationLocation")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("CreationLocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("POSWebsite.Models.Customer", "Customer")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -356,7 +347,7 @@ namespace POSWebsite.Migrations
 
                     b.HasOne("POSWebsite.Models.Product", "Product")
                         .WithMany("OrderDetails")
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -365,29 +356,10 @@ namespace POSWebsite.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("POSWebsite.Models.ProductBranch", b =>
+            modelBuilder.Entity("POSWebsite.Models.Product", b =>
                 {
                     b.HasOne("POSWebsite.Models.BranchStore", "BranchStore")
-                        .WithMany("ProductBranches")
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("POSWebsite.Models.Product", "Product")
-                        .WithMany("ProductBranches")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("BranchStore");
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("POSWebsite.Models.Staff", b =>
-                {
-                    b.HasOne("POSWebsite.Models.BranchStore", "BranchStore")
-                        .WithMany("Staff")
+                        .WithMany()
                         .HasForeignKey("BranchStoreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -395,18 +367,15 @@ namespace POSWebsite.Migrations
                     b.Navigation("BranchStore");
                 });
 
-            modelBuilder.Entity("POSWebsite.Models.BranchStore", b =>
+            modelBuilder.Entity("POSWebsite.Models.Staff", b =>
                 {
-                    b.Navigation("Orders");
+                    b.HasOne("POSWebsite.Models.BranchStore", "BranchStore")
+                        .WithMany()
+                        .HasForeignKey("BranchStoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("ProductBranches");
-
-                    b.Navigation("Staff");
-                });
-
-            modelBuilder.Entity("POSWebsite.Models.Customer", b =>
-                {
-                    b.Navigation("Orders");
+                    b.Navigation("BranchStore");
                 });
 
             modelBuilder.Entity("POSWebsite.Models.Order", b =>
@@ -417,8 +386,6 @@ namespace POSWebsite.Migrations
             modelBuilder.Entity("POSWebsite.Models.Product", b =>
                 {
                     b.Navigation("OrderDetails");
-
-                    b.Navigation("ProductBranches");
                 });
 #pragma warning restore 612, 618
         }
