@@ -6,6 +6,7 @@
         public string Message { get; set; }
         public string Data { get; set; }
         public SalesReport SalesReport { get; set; }
+        public string AgentSelection { get; set; }
         public string TimelineSelection { get; set; }
         public string QuarterSelection { get; set; }
         public string QuarterYearSelection { get; set; }
@@ -57,6 +58,16 @@
             QuarterSelection = quarterSelection;
             QuarterYearSelection = quarterYearSelection;
             YearSelection = yearSelection;
+            FromDate = fromDate;
+            ToDate = toDate;
+        }
+
+        
+        public ResponseStatus(bool status, string message, string agentSelection, string fromDate, string toDate)
+        {
+            Status = status;
+            Message = message;
+            AgentSelection = agentSelection;
             FromDate = fromDate;
             ToDate = toDate;
         }

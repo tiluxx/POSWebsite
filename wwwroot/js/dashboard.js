@@ -297,9 +297,6 @@ var netsells = {
 };
 new ApexCharts(document.querySelector("#netsells"), netsells).render();
 
-
-
-
 // =====================================
 // total-orders chart   
 // =====================================

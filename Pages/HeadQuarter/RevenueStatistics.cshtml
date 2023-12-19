@@ -1,0 +1,308 @@
+﻿@page
+@using Models
+@model POSWebsite.Pages.HeadQuarter.RevenueStatisticsModel
+@{
+    ViewData["Title"] = "Revenue Statistics";
+}
+
+<div class="card mb-3 d-none d-lg-block">
+    <div class="card-body px-4 py-3">
+        <form asp-page-handler="ViewSalesReport" method="post">
+            <div class="d-flex align-items-center col-12">
+                <div class="d-flex align-items-center">
+                    <p class="mb-0">Agent's Retail Store:</p>
+                    <div class="dropdown border-end">
+                        <div class="px-4">
+                            <select class="form-select" name="AgentSelection" id="agent-selection">
+                                <option value="-1" selected>All Agents</option>
+                                @foreach (BranchStore branch in Model.GetBranches())
+                                {
+                                    <option value="@branch.Id">@branch.BranchName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <p class="ps-4 mb-0">Timeline:</p>
+                    <div class="dropdown" id="date-select-group">
+                        <div class="input-group px-4">
+                            <input class="form-control" type="date" name="FromDate" id="from-date-picker" value="@DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd")">
+                            <input class="form-control" type="date" name="ToDate" id="to-date-picker" value="@DateOnly.FromDateTime(DateTime.Now.AddDays(16)).ToString("yyyy-MM-dd")">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary rounded-pill text-end">
+                        View Inventory
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (Model.GetResponseStatus() != null)
+{
+    <div class="row">
+        <div class="col-lg-6 d-flex align-items-stretch">
+            <div class="card w-100">
+                <div class="card-body border-bottom position-relative">
+                    <h5 class="card-title fs-6 mb-1">Congratulations Jonathan</h5>
+                    <p class="mb-0">You have done 38% more sales</p>
+                    <div class="mt-6">
+                        <ul class="list-unstyled mb-0">
+                            <li class="d-flex align-items-center mb-10">
+                                <div class="bg-light-success p-7 me-3 rounded-circle d-flex align-items-center justify-content-center">
+                                    <iconify-icon icon="solar:cart-5-line-duotone" class="fs-7 text-success"></iconify-icon>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1 fs-4">64 new orders</h6>
+                                    <p class="mb-0">Processing</p>
+                                </div>
+                            </li>
+                            <li class="d-flex align-items-center mb-10">
+                                <div class="bg-light-warning p-7 me-3 rounded-circle d-flex align-items-center justify-content-center">
+                                    <iconify-icon icon="solar:pause-line-duotone" class="fs-6 text-warning"></iconify-icon>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1 fs-4">4 orders</h6>
+                                    <p class="mb-0">On hold</p>
+                                </div>
+                            </li>
+                            <li class="d-flex align-items-center">
+                                <div class="bg-light-indigo p-7 me-3 rounded-circle d-flex align-items-center justify-content-center">
+                                    <iconify-icon icon="solar:bicycling-round-bold-duotone" class="fs-7 text-indigo"></iconify-icon>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1 fs-4">12 orders</h6>
+                                    <p class="mb-0">Delivered</p>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="man-working-on-laptop">
+                            <img src="../../dist/images/background/man-working-on-laptop.png" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body pb-2">
+                    <div class="d-flex align-items-baseline justify-content-between">
+                        <div>
+                            <h5 class="card-title fs-6 mb-1">Total Orders</h5>
+                            <p class="mb-0">Weekly order updates</p>
+                        </div>
+                        <select class="form-select fw-bold w-auto shadow-none">
+                            <option value="1">This Week</option>
+                            <option value="2">April 2023</option>
+                            <option value="3">May 2023</option>
+                            <option value="4">June 2023</option>
+                        </select>
+                    </div>
+                    <div id="netsells" style="min-height: 275px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 d-flex align-items-stretch">
+            <div class="row">
+                <div class="col-sm-6 d-flex align-items-stretch">
+                    <div class="card w-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="card-title mb-1 fw-semibold">Amounts</h5>
+                                    <p class="mb-0">@Model.GetResponseStatus().SalesReport.TypeOfTimeline</p>
+                                </div>
+                                <div>
+                                    <h5 class="card-title mb-1 fw-semibold text-end">@Model.GetResponseStatus().SalesReport.TotalAmount</h5>
+                                    <span class="badge rounded-pill bg-light-warning text-warning border-warning border text-end">-3.8%</span>
+                                </div>
+                            </div>
+                            <div id="total-orders" class="total-orders-chart my-1" style="min-height: 165px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 d-flex align-items-stretch">
+                    <div class="card w-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="card-title fw-semibold mb-1">Products</h5>
+                                    <p class="mb-0">@Model.GetResponseStatus().SalesReport.TypeOfTimeline</p>
+                                </div>
+                                <div>
+                                    <h5 class="card-title mb-1 fw-semibold text-end">@Model.GetResponseStatus().SalesReport.TotalProducts</h5>
+                                    <span class="badge rounded-pill bg-light-success text-success border-success border text-end">+26.5%</span>
+                                </div>
+                            </div>
+                            <div id="products" class="my-8" style="min-height: 148.7px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 d-flex align-items-stretch">
+                    <div class="card w-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="card-title mb-1">Orders</h5>
+                                    <p class="mb-0">@Model.GetResponseStatus().SalesReport.TypeOfTimeline</p>
+                                </div>
+                                <div>
+                                    <h5 class="card-title mb-1 text-end">@Model.GetResponseStatus().SalesReport.TotalOrders</h5>
+                                    <span class="badge rounded-pill bg-light-success text-success border-success border text-end">+26.5%</span>
+                                </div>
+                            </div>
+                            <div id="customers" class="my-5" style="min-height: 103px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 d-flex align-items-stretch">
+                    <div class="card w-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="card-title mb-1">Customers</h5>
+                                    <p class="mb-0">@Model.GetResponseStatus().SalesReport.TypeOfTimeline</p>
+                                </div>
+                                <div>
+                                    <h5 class="card-title mb-1 text-end">@Model.GetResponseStatus().SalesReport.TotalCustomers</h5>
+                                    <span class="badge rounded-pill bg-light-success text-success border-success border text-end">+26.5%</span>
+                                </div>
+                            </div>
+                            <div id="customers" class="my-5" style="min-height: 103px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-0">
+                <div class="card-body">
+                    <div class="d-md-flex justify-content-between mb-10">
+                        <div class="mb-10 mb-md-0">
+                            <h5 class="card-title">Revenue</h5>
+                            <p class="card-subtitle mb-0">@Model.GetResponseStatus().SalesReport.TypeOfTimeline</p>
+                        </div>
+                    </div>
+                    @{
+                        List<RevenueItem> revenueItems = Model.GetResponseStatus().SalesReport.RevenueItems;
+                        for (int i = 0; i < revenueItems.Count; ++i)
+                        {
+                            <input type="hidden" value="@revenueItems[i].Revenue" id="revenu_@i" />
+                            <input type="hidden" value="@revenueItems[i].DateVal.ToString("M")" id="date_@i" />
+                        }
+                    }
+                    <div id="revenueStatistics" class="w-100">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script src="~/lib/apexcharts/dist/apexcharts.min.js"></script>
+<script type="text/javascript">
+    const data = []
+    const categories = []
+    let i = 0;
+    let revenueInput = document.getElementById('revenu_' + i)
+    let dateInput = document.getElementById('date_' + i)
+    while (revenueInput != null) {
+        data.push(revenueInput.value)
+        categories.push(dateInput.value)
+        ++i;
+        revenueInput = document.getElementById('revenu_' + i)
+        dateInput = document.getElementById('date_' + i)
+    }
+    const revenues = {
+        series: [
+            {
+                name: "",
+                data: data
+            }
+        ],
+        chart: {
+            fontFamily: "Plus Jakarta Sans', sans-serif",
+            foreColor: "#adb0bb",
+            height: 260,
+            type: "line",
+            toolbar: {
+                show: false,
+            },
+            stacked: false
+        },
+        legend: {
+            show: false,
+        },
+        stroke: {
+            width: 3,
+            curve: "smooth",
+        },
+        grid: {
+            borderColor: "var(--bs-border-color)",
+            xaxis: {
+                lines: {
+                    show: true
+                }
+            },
+            yaxis: {
+                lines: {
+                    show: true
+                },
+
+            },
+            padding: {
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0
+            },
+        },
+        colors: ["#0085db"],
+        fill: {
+            type: "gradient",
+            gradient: {
+                shade: "dark",
+                gradientToColors: ["#6993ff"],
+                shadeIntensity: 1,
+                type: "horizontal",
+                opacityFrom: 1,
+                opacityTo: 1,
+                stops: [0, 100, 100, 100],
+            },
+        },
+        markers: {
+            size: 0,
+        },
+        xaxis: {
+            labels: {
+                show: true,
+            },
+            type: 'category',
+            categories: categories,
+            axisTicks: {
+                show: false,
+            },
+            axisBorder: {
+                show: false,
+            },
+
+        },
+        yaxis: {
+            axisTicks: {
+                show: false,
+            },
+            axisBorder: {
+                show: false,
+            },
+            labels: {
+                show: true,
+                formatter: function (value) {
+                    return "$" + value;
+                }
+            },
+        },
+        tooltip: {
+            theme: "dark",
+        },
+    };
+    new ApexCharts(document.querySelector("#revenueStatistics"), revenues).render();
+</script>

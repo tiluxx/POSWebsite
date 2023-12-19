@@ -9,5 +9,6 @@
         public long TotalCustomers { get; set; }
         public Decimal TotalProfit { get; set; }
         public List<Order> Orders { get; set; } = new List<Order>();
+        public List<RevenueItem> RevenueItems { get; set; } = new List<RevenueItem>();
     }
 }

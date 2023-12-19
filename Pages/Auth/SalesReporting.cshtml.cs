@@ -97,7 +97,7 @@ namespace POSWebsite.Pages.Auth
                             cust => fromDate <= cust.CreationDate && cust.CreationDate <= toDate).ToList();
 
                         retrievedSalesReport = CreateSalesReport(orders);
-                        retrievedSalesReport.TypeOfTimeline = $"From{fromDate.ToString("dd, Y")} to {toDate.ToString("dd, Y")}";
+                        retrievedSalesReport.TypeOfTimeline = $"From {fromDate.ToString("M")} to {toDate.ToString("M")}";
                         retrievedSalesReport.TotalCustomers = newCustomers.Count;
                         break;
                     case "quarter":
