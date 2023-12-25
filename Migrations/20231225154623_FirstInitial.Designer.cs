@@ -12,8 +12,8 @@ using POSWebsite.Models;
 namespace POSWebsite.Migrations
 {
     [DbContext(typeof(B2BDbContrext))]
-    [Migration("20231218171720_UpdateOrderDetailProductFK")]
-    partial class UpdateOrderDetailProductFK
+    [Migration("20231225154623_FirstInitial")]
+    partial class FirstInitial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -227,6 +227,10 @@ namespace POSWebsite.Migrations
                     b.Property<decimal>("ImportPrice")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("Photo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ProductName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -333,13 +337,13 @@ namespace POSWebsite.Migrations
             modelBuilder.Entity("POSWebsite.Models.Order", b =>
                 {
                     b.HasOne("POSWebsite.Models.BranchStore", "CreationLocation")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("CreationLocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("POSWebsite.Models.Customer", "Customer")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -390,7 +394,7 @@ namespace POSWebsite.Migrations
             modelBuilder.Entity("POSWebsite.Models.Staff", b =>
                 {
                     b.HasOne("POSWebsite.Models.BranchStore", "BranchStore")
-                        .WithMany()
+                        .WithMany("Staff")
                         .HasForeignKey("BranchStoreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -400,7 +404,16 @@ namespace POSWebsite.Migrations
 
             modelBuilder.Entity("POSWebsite.Models.BranchStore", b =>
                 {
+                    b.Navigation("Orders");
+
                     b.Navigation("ProductBranches");
+
+                    b.Navigation("Staff");
+                });
+
+            modelBuilder.Entity("POSWebsite.Models.Customer", b =>
+                {
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("POSWebsite.Models.Order", b =>

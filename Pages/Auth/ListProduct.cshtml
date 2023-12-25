@@ -1,0 +1,44 @@
+﻿@page
+@model ListProductModel
+@{
+
+}
+
+<div class="container-fluid">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-body mb-3">
+                <a asp-area="" asp-page="/Auth/AddProduct" class="btn btn-success">Add Product</a>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    @if(Model.Products != null)
+                    {
+                        @foreach (var product in Model.Products)
+                        {
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <img src="~/images/product/@product.Photo" alt="@product.ProductName">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@product.ProductName</h5>
+                                        <p class="card-text">Giá bán lẻ: @product.RetailPrice</p>
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <a asp-area="" asp-page="/Auth/EditProduct" asp-route-id="@product.Id" class="btn btn-primary">Edit</a>
+                                            <form method="post">
+                                                <input type="hidden" name="productId" value="@product.Id" />
+                                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this product?')">Delete</button>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

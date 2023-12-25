@@ -1,5 +1,13 @@
 ﻿@{
     string profileUrl = User.Claims.Where(c => c.Type == "Avatar").Select(c => c.Value).FirstOrDefault() ?? "~/images/profile/user1.jpg";
+    if (!User.Identity.IsAuthenticated)
+    {
+        <script>window.location.href = '/Auth/Login';</script>
+    }
+    else if (!User.IsInRole("Admin") && !User.IsInRole("Employee"))
+    {
+        <p>Bạn không có quyền truy cập vào trang này.</p>
+    }
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -69,7 +77,7 @@
                         <li class="sidebar-item">
                             <a class="sidebar-link sidebar-link indigo-hover-bg"
                                asp-area=""
-                               asp-page="/Auth/NewItemAdding"
+                               asp-page="/Auth/ListProduct"
                                aria-expanded="false">
                                 <span class="aside-icon p-2 bg-light-indigo rounded-3">
                                     <i class="ti ti-square-plus fs-7 text-indigo"></i>

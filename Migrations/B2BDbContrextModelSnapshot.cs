@@ -224,6 +224,10 @@ namespace POSWebsite.Migrations
                     b.Property<decimal>("ImportPrice")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("Photo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ProductName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

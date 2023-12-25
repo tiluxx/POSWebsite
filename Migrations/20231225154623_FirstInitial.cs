@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace POSWebsite.Migrations
 {
     /// <inheritdoc />
-    public partial class TransactionDomainClass : Migration
+    public partial class FirstInitial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,7 +36,8 @@ namespace POSWebsite.Migrations
                     Fullname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TelNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -51,24 +52,17 @@ namespace POSWebsite.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Barcode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
                     UnitPrice = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ImportPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     RetailPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    BranchStoreId = table.Column<int>(type: "int", nullable: false)
+                    Photo = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Product", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Product_BranchStore_BranchStoreId",
-                        column: x => x.BranchStoreId,
-                        principalTable: "BranchStore",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -133,6 +127,29 @@ namespace POSWebsite.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProductBranch",
+                columns: table => new
+                {
+                    BranchId = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductBranch", x => new { x.BranchId, x.ProductId });
+                    table.ForeignKey(
+                        name: "FK_ProductBranch_BranchStore_BranchId",
+                        column: x => x.BranchId,
+                        principalTable: "BranchStore",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ProductBranch_Product_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Product",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Account",
                 columns: table => new
                 {
@@ -169,7 +186,7 @@ namespace POSWebsite.Migrations
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Discount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ActualPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    ActualUnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -180,8 +197,8 @@ namespace POSWebsite.Migrations
                         principalTable: "Order",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_OrderDetail_Product_OrderId",
-                        column: x => x.OrderId,
+                        name: "FK_OrderDetail_Product_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Product",
                         principalColumn: "Id");
                 });
@@ -202,9 +219,14 @@ namespace POSWebsite.Migrations
                 column: "CustomerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Product_BranchStoreId",
-                table: "Product",
-                column: "BranchStoreId");
+                name: "IX_OrderDetail_ProductId",
+                table: "OrderDetail",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductBranch_ProductId",
+                table: "ProductBranch",
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Staff_BranchStoreId",
@@ -222,6 +244,9 @@ namespace POSWebsite.Migrations
                 name: "OrderDetail");
 
             migrationBuilder.DropTable(
+                name: "ProductBranch");
+
+            migrationBuilder.DropTable(
                 name: "Staff");
 
             migrationBuilder.DropTable(
@@ -231,10 +256,10 @@ namespace POSWebsite.Migrations
                 name: "Product");
 
             migrationBuilder.DropTable(
-                name: "Customer");
+                name: "BranchStore");
 
             migrationBuilder.DropTable(
-                name: "BranchStore");
+                name: "Customer");
         }
     }
 }
