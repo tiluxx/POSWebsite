@@ -1,0 +1,29 @@
+﻿@page "{id:int}"
+@model POSWebsite.Pages.Auth.CustomerDetailsModel
+
+@{
+    ViewData["Title"] = "Customer Details";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title">Customer Details</h5>
+    </div>
+    <div class="card-body">
+        @if (Model.Customer != null)
+        {
+            <div>
+                <h2>@Model.Customer.Fullname</h2>
+                <p>Gender: @Model.Customer.Gender</p>
+                <p>Tel No: @Model.Customer.TelNo</p>
+                <p>Address: @Model.Customer.Address</p>
+                <p>Creation Date: @Model.Customer.CreationDate.ToShortDateString()</p>
+                <!-- Other customer details you want to display -->
+            </div>
+        }
+        else
+        {
+            <p>Customer not found.</p>
+        }
+    </div>
+</div>

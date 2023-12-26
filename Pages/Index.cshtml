@@ -19,6 +19,20 @@
             <div class="d-flex align-items-center justify-content-between mb-4">
                 <a class="text-primary fw-bold" asp-area="" asp-page="/Index">Forgot Password?</a>
             </div>
+
+            <!-- Role selection -->
+            <div class="mb-3">
+                <label for="roleSelect" class="form-label">Select Role:</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="role" id="adminRole" value="admin">
+                    <label class="form-check-label" for="adminRole">Admin</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="role" id="employeeRole" value="employee">
+                    <label class="form-check-label" for="employeeRole">Employee</label>
+                </div>
+            </div>
+
             @if (Model.GetResponseStatus() != null)
             {
                 if (!Model.GetResponseStatus().Status)

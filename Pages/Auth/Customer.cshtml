@@ -1,0 +1,35 @@
+﻿@page
+@model CustomerModel
+@{
+    ViewData["Title"] = "Customers";
+}
+
+<h1>Customers</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Gender</th>
+            <th>Tel No</th>
+            <th>Address</th>
+            <th>Creation Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in Model.Customers)
+        {
+            <tr>
+                <td>@customer.Fullname</td>
+                <td>@customer.Gender</td>
+                <td>@customer.TelNo</td>
+                <td>@customer.Address</td>
+                <td>@customer.CreationDate.ToShortDateString()</td>
+                <td>
+                    <a asp-page="/Auth/CustomerDetails" asp-route-id="@customer.Id" class="btn btn-primary">View Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
