@@ -20,9 +20,16 @@ namespace POSWebsite.Pages.Auth
 
         public IList<Models.Product> Products { get; set; }
 
-        public void OnGet()
+        public void OnGet(List<Product> products = null)
         {
-            Products = _dbContext.Product.ToList() ?? new List<Product>();
+            if (products != null && products.Any())
+            {
+                Products = products;
+            }
+            else
+            {
+                Products = _dbContext.Product.ToList() ?? new List<Product>();
+            }
         }
 
 

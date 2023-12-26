@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace POSWebsite.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstInitial : Migration
+    public partial class AddPhotoToDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

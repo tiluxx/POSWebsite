@@ -3,6 +3,30 @@
 @{
 
 }
+<!-- Modal for displaying product information -->
+<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="productModalLabel">Product Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img id="productImg" src="" alt="Product Image" class="img-fluid">
+                    </div>
+                    <div class="col-md-6">
+                        <h5 id="productName" class="card-title"></h5>
+                        <p id="productDescription" class="card-text"></p>
+                        <p id="productRetailPrice" class="card-text"></p>
+                        <button id="addToCartBtn" class="btn btn-primary">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="container-fluid">
     <div class="container-fluid">
@@ -13,13 +37,13 @@
 
             <div class="card-body">
                 <div class="row">
-                    @if(Model.Products != null)
+                    @if (Model.Products != null)
                     {
                         @foreach (var product in Model.Products)
                         {
                             <div class="col-md-4">
                                 <div class="card">
-                                    <img src="~/images/product/@product.Photo" alt="@product.ProductName">
+                                    <img src="@Url.Content(product.Photo)" alt="@product.ProductName" class="product-img" data-product-name="@product.ProductName" data-product-description="@product.Description" data-product-retail-price="@product.RetailPrice" data-product-img="@Url.Content(product.Photo)" data-bs-toggle="modal" data-bs-target="#productModal">
                                     <div class="card-body">
                                         <h5 class="card-title">@product.ProductName</h5>
                                         <p class="card-text">Giá bán lẻ: @product.RetailPrice</p>
@@ -29,7 +53,6 @@
                                                 <input type="hidden" name="productId" value="@product.Id" />
                                                 <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this product?')">Delete</button>
                                             </form>
-
                                         </div>
                                     </div>
                                 </div>
@@ -42,3 +65,26 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.querySelectorAll('.product-img').forEach(item => {
+        item.addEventListener('click', function () {
+            const productName = this.getAttribute('data-product-name');
+            const productDescription = this.getAttribute('data-product-description');
+            const productImg = this.getAttribute('data-product-img');
+            const productRetailPrice = this.getAttribute('data-product-retail-price');
+            const productPrice = this.getAttribute('data-product-img');
+
+            document.getElementById('productName').innerText = productName;
+            document.getElementById('productDescription').innerText = productDescription;
+            document.getElementById('productRetailPrice').innerText = `Giá bán lẻ: ${productRetailPrice}`;
+            document.getElementById('productImg').src = productImg;
+
+            // Handling "Add to Cart" button click
+            document.getElementById('addToCartBtn').addEventListener('click', function () {
+                // Them vao muc Order
+                Console.WriteLine(`Item '${productName}' added to the cart.`);
+            });
+        });
+    });
+</script>

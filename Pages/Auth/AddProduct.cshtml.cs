@@ -22,17 +22,37 @@ namespace POSWebsite.Pages.Auth
         {
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(IFormFile photo)
         {
-            if (!ModelState.IsValid)
+            try
             {
+
+                if (photo != null && photo.Length > 0)
+                {
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(photo.FileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "product", fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await photo.CopyToAsync(stream);
+                    }
+
+                    Product.Photo = "/images/product/" + fileName;
+                }
+
+                Product.CreationDate = DateTime.Now;
+
+                _dbContext.Product.Add(Product);
+                await _dbContext.SaveChangesAsync();
+
+                var updateProducts = _dbContext.Product.ToList();
+                return RedirectToPage("/Auth/ListProduct", new { products = updateProducts });
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Error: {ex.Message}");
                 return Page();
             }
-
-            _dbContext.Product.Add(Product);
-            await _dbContext.SaveChangesAsync();
-
-            return RedirectToPage("/Auth/ListProduct");
         }
 
     }

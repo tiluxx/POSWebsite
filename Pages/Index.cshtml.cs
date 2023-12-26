@@ -53,12 +53,12 @@ namespace POSWebsite.Pages
                 if (account.Roles.Contains("Admin"))
                 {
                     await SaveLogin(account);
-                    return Redirect("/HeadQuarter/Index");
+                    return Redirect("/Auth/Index");
                 }
                 else
                 {
                     await SaveLogin(account);
-                    return Redirect("/Auth/Index");
+                    return Redirect("/Head-quarter/Index");
                 }
             }
 
@@ -90,7 +90,7 @@ namespace POSWebsite.Pages
                 new Claim(ClaimTypes.Email, account.Email),
                 new Claim(ClaimTypes.Name, account.Fullname),
                 new Claim(ClaimTypes.Role, role),
-                new Claim("Avatar", account.Staff.ProfilePictureUrl)
+                new Claim("Avatar", account.Staff.ProfilePictureUrl),
             };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

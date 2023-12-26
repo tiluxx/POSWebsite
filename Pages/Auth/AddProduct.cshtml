@@ -4,50 +4,59 @@
     ViewData["Title"] = "Add Product";
 }
 
-<h1>Add New Product</h1>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Add New Product</h1>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="productName" class="form-label">Product Name:</label>
+                            <input type="text" class="form-control" id="productName" asp-for="Product.ProductName">
+                            <span asp-validation-for="Product.ProductName" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="barcode" class="form-label">Barcode:</label>
+                            <input type="text" class="form-control" id="barcode" asp-for="Product.Barcode">
+                            <span asp-validation-for="Product.Barcode" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="unitPrice" class="form-label">Unit Price:</label>
+                            <input type="text" class="form-control" id="unitPrice" asp-for="Product.UnitPrice">
+                            <span asp-validation-for="Product.UnitPrice" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="importPrice" class="form-label">Import Price:</label>
+                            <input type="text" class="form-control" id="importPrice" asp-for="Product.ImportPrice">
+                            <span asp-validation-for="Product.ImportPrice" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="retailPrice" class="form-label">Retail Price:</label>
+                            <input type="text" class="form-control" id="retailPrice" asp-for="Product.RetailPrice">
+                            <span asp-validation-for="Product.RetailPrice" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Category:</label>
+                            <input type="text" class="form-control" id="category" asp-for="Product.Category">
+                            <span asp-validation-for="Product.Category" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description:</label>
+                            <textarea class="form-control" id="description" asp-for="Product.Description"></textarea>
+                            <span asp-validation-for="Product.Description" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="photo" class="form-label">Product Photo:</label>
+                            <input type="file" class="form-control" id="photo" name="photo">
+                        </div>
 
-<form method="POST">
-    <div class="form-group">
-        <label for="productName">Product Name:</label>
-        <input type="text" class="form-control" id="productName" asp-for="Product.ProductName">
-        <span asp-validation-for="Product.ProductName" class="text-danger"></span>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Add Product</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label for="barcode">Barcode:</label>
-        <input type="text" class="form-control" id="barcode" asp-for="Product.Barcode">
-        <span asp-validation-for="Product.Barcode" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label for="unitPrice">Unit Price:</label>
-        <input type="text" class="form-control" id="unitPrice" asp-for="Product.UnitPrice">
-        <span asp-validation-for="Product.UnitPrice" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label for="importPrice">Import Price:</label>
-        <input type="text" class="form-control" id="importPrice" asp-for="Product.ImportPrice">
-        <span asp-validation-for="Product.ImportPrice" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label for="retailPrice">Retail Price:</label>
-        <input type="text" class="form-control" id="retailPrice" asp-for="Product.RetailPrice">
-        <span asp-validation-for="Product.RetailPrice" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label for="category">Category:</label>
-        <input type="text" class="form-control" id="category" asp-for="Product.Category">
-        <span asp-validation-for="Product.Category" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label for="description">Description:</label>
-        <textarea class="form-control" id="description" asp-for="Product.Description"></textarea>
-        <span asp-validation-for="Product.Description" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label for="photo">Product Photo:</label>
-        <input type="file" class="form-control" id="photo" asp-for="Product.Photo">
-        <span asp-validation-for="Product.Photo" class="text-danger"></span>
-    </div>
-
-    <!-- Add other fields here for product details -->
-    <button type="submit" class="btn btn-primary mt-3">Add Product</button>
-</form>
+</div>
