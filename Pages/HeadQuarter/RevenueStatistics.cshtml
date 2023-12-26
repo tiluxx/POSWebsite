@@ -41,64 +41,7 @@
 @if (Model.GetResponseStatus() != null)
 {
     <div class="row">
-        <div class="col-lg-6 d-flex align-items-stretch">
-            <div class="card w-100">
-                <div class="card-body border-bottom position-relative">
-                    <h5 class="card-title fs-6 mb-1">Congratulations Jonathan</h5>
-                    <p class="mb-0">You have done 38% more sales</p>
-                    <div class="mt-6">
-                        <ul class="list-unstyled mb-0">
-                            <li class="d-flex align-items-center mb-10">
-                                <div class="bg-light-success p-7 me-3 rounded-circle d-flex align-items-center justify-content-center">
-                                    <iconify-icon icon="solar:cart-5-line-duotone" class="fs-7 text-success"></iconify-icon>
-                                </div>
-                                <div>
-                                    <h6 class="mb-1 fs-4">64 new orders</h6>
-                                    <p class="mb-0">Processing</p>
-                                </div>
-                            </li>
-                            <li class="d-flex align-items-center mb-10">
-                                <div class="bg-light-warning p-7 me-3 rounded-circle d-flex align-items-center justify-content-center">
-                                    <iconify-icon icon="solar:pause-line-duotone" class="fs-6 text-warning"></iconify-icon>
-                                </div>
-                                <div>
-                                    <h6 class="mb-1 fs-4">4 orders</h6>
-                                    <p class="mb-0">On hold</p>
-                                </div>
-                            </li>
-                            <li class="d-flex align-items-center">
-                                <div class="bg-light-indigo p-7 me-3 rounded-circle d-flex align-items-center justify-content-center">
-                                    <iconify-icon icon="solar:bicycling-round-bold-duotone" class="fs-7 text-indigo"></iconify-icon>
-                                </div>
-                                <div>
-                                    <h6 class="mb-1 fs-4">12 orders</h6>
-                                    <p class="mb-0">Delivered</p>
-                                </div>
-                            </li>
-                        </ul>
-                        <div class="man-working-on-laptop">
-                            <img src="../../dist/images/background/man-working-on-laptop.png" alt="" class="img-fluid">
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body pb-2">
-                    <div class="d-flex align-items-baseline justify-content-between">
-                        <div>
-                            <h5 class="card-title fs-6 mb-1">Total Orders</h5>
-                            <p class="mb-0">Weekly order updates</p>
-                        </div>
-                        <select class="form-select fw-bold w-auto shadow-none">
-                            <option value="1">This Week</option>
-                            <option value="2">April 2023</option>
-                            <option value="3">May 2023</option>
-                            <option value="4">June 2023</option>
-                        </select>
-                    </div>
-                    <div id="netsells" style="min-height: 275px;"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 d-flex align-items-stretch">
+        <div>
             <div class="row">
                 <div class="col-sm-6 d-flex align-items-stretch">
                     <div class="card w-100">
@@ -113,7 +56,6 @@
                                     <span class="badge rounded-pill bg-light-warning text-warning border-warning border text-end">-3.8%</span>
                                 </div>
                             </div>
-                            <div id="total-orders" class="total-orders-chart my-1" style="min-height: 165px;"></div>
                         </div>
                     </div>
                 </div>
@@ -130,7 +72,6 @@
                                     <span class="badge rounded-pill bg-light-success text-success border-success border text-end">+26.5%</span>
                                 </div>
                             </div>
-                            <div id="products" class="my-8" style="min-height: 148.7px;"></div>
                         </div>
                     </div>
                 </div>
@@ -147,7 +88,6 @@
                                     <span class="badge rounded-pill bg-light-success text-success border-success border text-end">+26.5%</span>
                                 </div>
                             </div>
-                            <div id="customers" class="my-5" style="min-height: 103px;"></div>
                         </div>
                     </div>
                 </div>
@@ -164,7 +104,6 @@
                                     <span class="badge rounded-pill bg-light-success text-success border-success border text-end">+26.5%</span>
                                 </div>
                             </div>
-                            <div id="customers" class="my-5" style="min-height: 103px;"></div>
                         </div>
                     </div>
                 </div>

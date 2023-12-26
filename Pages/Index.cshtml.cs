@@ -53,12 +53,12 @@ namespace POSWebsite.Pages
                 if (account.Roles.Contains("Admin"))
                 {
                     await SaveLogin(account);
-                    return Redirect("/Auth/Index");
+                    return Redirect("/HeadQuarter/Index");
                 }
                 else
                 {
                     await SaveLogin(account);
-                    return Redirect("/Head-quarter/Index");
+                    return Redirect("/Auth/Index");
                 }
             }
 
