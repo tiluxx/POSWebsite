@@ -79,7 +79,7 @@ namespace POSWebsite.Pages
                 role = "Admin";
             }
 
-            string profilePictureUrl;
+            string profilePictureUrl = "";
             Staff? staff = _dbContext.Staff.Where(s => s.Email == account.Email).FirstOrDefault();
             if (staff != null)
             {
@@ -90,7 +90,7 @@ namespace POSWebsite.Pages
                 new Claim(ClaimTypes.Email, account.Email),
                 new Claim(ClaimTypes.Name, account.Fullname),
                 new Claim(ClaimTypes.Role, role),
-                new Claim("Avatar", account.Staff.ProfilePictureUrl)
+                new Claim("Avatar", profilePictureUrl)
             };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

@@ -12,8 +12,8 @@ using POSWebsite.Models;
 namespace POSWebsite.Migrations
 {
     [DbContext(typeof(B2BDbContrext))]
-    [Migration("20231225154623_FirstInitial")]
-    partial class FirstInitial
+    [Migration("20231226004209_FirstInitialization")]
+    partial class FirstInitialization
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
