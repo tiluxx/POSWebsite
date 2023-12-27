@@ -1,62 +1,61 @@
 ﻿@page
 @model POSWebsite.Pages.Auth.CartModel
+@{
+    Layout = null;
+}
 
-<!-- Modal for displaying product information -->
-<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
-    <!-- ... (Code của Modal như bạn đã cung cấp) ... -->
-</div>
+<!DOCTYPE html>
 
-<div class="container-fluid">
-    <div class="container-fluid">
-        <div class="card">
-            <div class="card-body">
-                <h2>Shopping Cart</h2>
-                <hr>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Cart</title>
+</head>
+<body>
+    <h3>Cart</h3>
+
+    <form method="post" asp-page-handler="Update">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Photo</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
                 @if (Model.CartItems != null && Model.CartItems.Any())
                 {
-                    @foreach (var item in Model.CartItems)
+                    @for (var i = 0; i < Model.CartItems.Count; i++)
                     {
-                        <div class="row mb-3">
-                            <div class="col-md-3">
-                                <img src="@item.Product.Photo" alt="@item.Product.ProductName" class="img-fluid">
-                            </div>
-                            <div class="col-md-6">
-                                <h5>@item.Product.ProductName</h5>
-                                <p>Description: @item.Product.Description</p>
-                                <p>Price: @item.Product.RetailPrice</p>
-                            </div>
-                            <div class="col-md-3">
-                                <button class="btn btn-danger">Remove</button>
-                            </div>
-                        </div>
+                        <tr align="center">
+                            <td>
+                                <a asp-page="Cart" asp-page-handler="Delete" asp-route-id="@Model.CartItems[i].Product.Id">X</a>
+                            </td>
+                            <td>@Model.CartItems[i].Product.Id</td>
+                            <td>@Model.CartItems[i].Product.ProductName</td>
+                            <td><img src="~/images/product/@Model.CartItems[i].Product.Photo" width="120" height="100" /></td>
+                            <td>$@Model.CartItems[i].Product.RetailPrice</td>
+                            <td>
+                                <input type="number" asp-for="@Model.CartItems[i].Quantity" />
+                            </td>
+                        </tr>
                     }
                 }
                 else
                 {
-                    <p>Your cart is empty.</p>
+                    <tr>
+                        <td colspan="5">Your cart is empty.</td>
+                    </tr>
                 }
-            </div>
-        </div>
-    </div>
-</div>
+            </tbody>
+        </table>
 
-<script>
-    document.querySelectorAll('.product-img').forEach(item => {
-        item.addEventListener('click', function () {
-            const productName = this.getAttribute('data-product-name');
-            const productDescription = this.getAttribute('data-product-description');
-            const productImg = this.getAttribute('data-product-img');
-            const productRetailPrice = this.getAttribute('data-product-retail-price');
+        <button type="submit">Update Cart</button>
+    </form>
 
-            document.getElementById('productName').innerText = productName;
-            document.getElementById('productDescription').innerText = productDescription;
-            document.getElementById('productRetailPrice').innerText = `Giá bán lẻ: ${productRetailPrice}`;
-            document.getElementById('productImg').src = productImg;
-
-            document.getElementById('addToCartBtn').addEventListener('click', function () {
-                // Handle adding to cart
-                window.location.href = '/Auth/ListProduct';
-            });
-        });
-    });
-</script>
+    <a asp-page="Index">Continue Shopping</a>
+</body>
+</html>

@@ -33,31 +33,6 @@ namespace POSWebsite.Pages.Auth
             }
         }
 
-        /* [BindProperty(SupportsGet = true)]
-        public string SearchName { get; set; }
-
-        public async Task OnGetAsync(List<Product> products = null, string searchName = null)
-        {
-            IQueryable<Product> productsQuery = _dbContext.Product;
-
-            if (products != null && products.Any())
-            {
-                Products = products;
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(searchName))
-                {
-                    // Filter products by name using case-insensitive search
-                    productsQuery = productsQuery.Where(p => p.ProductName.Contains(searchName, StringComparison.OrdinalIgnoreCase));
-                }
-
-                Products = await productsQuery.ToListAsync();
-            }
-        } */
-
-
-
         public IActionResult OnGetEditProduct(int productId)
         {
             return RedirectToPage("/Auth/EditProduct", new { id = productId });

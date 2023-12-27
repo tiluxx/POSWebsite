@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using POSWebsite.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Helpers;
 
 namespace POSWebsite.Pages.Auth
 {
@@ -19,30 +20,20 @@ namespace POSWebsite.Pages.Auth
 
         public void OnGet()
         {
-            CartItems = _dbContext.CartItems.ToList();
+            CartItems = SessionHelper.GetObjectFromJson<List<CartItem>>(HttpContext.Session, "CartItems");
         }
 
-        public IActionResult OnPostAddToCart(int productId, int quantity)
+        public IActionResult OnPostUpdate(int[] quantities)
         {
-            var existingCartItem = _dbContext.CartItems.FirstOrDefault(item => item.ProductId == productId);
+            CartItems = SessionHelper.GetObjectFromJson<List<CartItem>>(HttpContext.Session, "CartItems");
 
-            if (existingCartItem != null)
+            for (var i = 0; i < CartItems.Count; i++)
             {
-                existingCartItem.Quantity += quantity;
-            }
-            else
-            {
-                var newCartItem = new CartItem
-                {
-                    ProductId = productId,
-                    Quantity = quantity
-                };
-                _dbContext.CartItems.Add(newCartItem);
+                CartItems[i].Quantity = quantities[i];
             }
 
-            _dbContext.SaveChanges();
-
-            return RedirectToPage("/Auth/Cart");
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "CartItems", CartItems);
+            return RedirectToPage("/Auth/Order");
         }
     }
 }
