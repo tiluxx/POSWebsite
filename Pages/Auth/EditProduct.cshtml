@@ -6,7 +6,7 @@
 @using System.IO
 
 
-<div class="container mt-4">
+@* <div class="container mt-4">
     <div class="card">
         <div class="card-body">
             <h1 class="card-title">Edit Product</h1>
@@ -64,6 +64,58 @@
 
 
 
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Update Product</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> *@
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Edit Product</h1>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="productName" class="form-label">Product Name:</label>
+                            <input type="text" class="form-control" id="productName" name="productName" value="@Model.Product.ProductName">
+                        </div>
+                        <div class="mb-3">
+                            <label for="barcode" class="form-label">Barcode:</label>
+                            <input type="text" class="form-control" id="barcode" name="barcode" value="@Model.Product.Barcode">
+                        </div>
+                        <div class="mb-3">
+                            <label for="retailPrice" class="form-label">Retail Price:</label>
+                            <input type="number" class="form-control" id="retailPrice" name="retailPrice" value="@Model.Product.RetailPrice">
+                        </div>
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Category:</label>
+                            <input type="text" class="form-control" id="category" name="category" value="@Model.Product.Category">
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description:</label>
+                            <textarea class="form-control" id="description" name="description">@Model.Product.Description</textarea>
+                        </div>
+                        @{
+                            string imageUrl = Model.Product.Photo;
+                            string imageName = imageUrl != null ? imageUrl.Substring(imageUrl.LastIndexOf('/') + 1) : string.Empty;
+                        }
+
+                        @* <div class="mb-3">
+                            <label for="photo" class="form-label">Product Photo:</label>
+                            @if (!string.IsNullOrEmpty(Model.Product.Photo))
+                            {
+                                <img src="@Url.Content(Model.Product.Photo)" alt="Current Photo" style="max-width: 200px;" />
+                            }
+                            <input type="file" class="form-control" id="photo" name="photo" value="@imageName">
+                        </div> *@
+
+                        <input type="hidden" class="form-control" id="productId" name="productId" value="@Model.Product.Id">
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary">Update Product</button>
                         </div>

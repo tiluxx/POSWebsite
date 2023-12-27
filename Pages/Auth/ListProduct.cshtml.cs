@@ -19,9 +19,9 @@ namespace POSWebsite.Pages.Auth
             _dbContext = dbContext;
         }
 
-        public IList<Models.Product> Products { get; set; }
+        public IList<Product> Products { get; set; }
 
-        public void OnGet(List<Product> products = null)
+        /*public void OnGet(List<Product> products = null)
         {
             if (products != null && products.Any())
             {
@@ -31,6 +31,11 @@ namespace POSWebsite.Pages.Auth
             {
                 Products = _dbContext.Product.ToList() ?? new List<Product>();
             }
+        }*/
+
+        public void OnGet()
+        {
+            Products = _dbContext.Product.ToList() ?? new List<Product>();
         }
 
         /* [BindProperty(SupportsGet = true)]
@@ -63,20 +68,22 @@ namespace POSWebsite.Pages.Auth
             return RedirectToPage("/Auth/EditProduct", new { id = productId });
         }
 
-        public async Task<IActionResult> OnPostDeleteProduct(int productId)
+        public async Task<IActionResult> OnPost(string productId)
         {
-            var product = _dbContext.Product.FirstOrDefault(p => p.Id == productId);
+            /*var product = _dbContext.Product.FirstOrDefault(p => p.Id.To == productId);
 
             if (product == null)
             {
                 return NotFound();
-            }
+            }*/
 
-            _dbContext.Product.Remove(product);
+            _dbContext.ProductBranch.Remove(
+                _dbContext.ProductBranch.Single(
+                    productBranch => productBranch.ProductId.ToString() == productId));
+            _dbContext.Product.Remove(_dbContext.Product.Single(product => product.Id.ToString() == productId));
             await _dbContext.SaveChangesAsync();
 
             return RedirectToPage("/Auth/ListProduct");
         }
-
     }
 }
