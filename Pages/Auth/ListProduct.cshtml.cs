@@ -52,6 +52,5 @@ namespace POSWebsite.Pages.Auth
 
             return RedirectToPage("/Auth/ListProduct");
         }
-
     }
 }

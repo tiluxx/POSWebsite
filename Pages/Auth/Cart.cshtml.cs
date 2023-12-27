@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using POSWebsite.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Helpers;
 
 namespace POSWebsite.Pages.Auth
 {
@@ -21,19 +20,38 @@ namespace POSWebsite.Pages.Auth
         public void OnGet()
         {
             CartItems = SessionHelper.GetObjectFromJson<List<CartItem>>(HttpContext.Session, "CartItems");
+            if (CartItems == null)
+            {
+                CartItems = new List<CartItem>();
+            }
         }
 
-        public IActionResult OnPostUpdate(int[] quantities)
+        public IActionResult OnGetBuyNow(int productId)
         {
-            CartItems = SessionHelper.GetObjectFromJson<List<CartItem>>(HttpContext.Session, "CartItems");
+            var product = _dbContext.Product.FirstOrDefault(p => p.Id == productId);
 
-            for (var i = 0; i < CartItems.Count; i++)
+            if (product != null)
             {
-                CartItems[i].Quantity = quantities[i];
+                var cartItem = new CartItem
+                {
+                    Product = product,
+                    ProductId = product.Id,
+                    Quantity = 1
+                };
+
+                CartItems = SessionHelper.GetObjectFromJson<List<CartItem>>(HttpContext.Session, "CartItems");
+
+                if (CartItems == null)
+                {
+                    CartItems = new List<CartItem>();
+                }
+
+                CartItems.Add(cartItem);
+
+                SessionHelper.SetObjectAsJson(HttpContext.Session, "CartItems", CartItems);
             }
 
-            SessionHelper.SetObjectAsJson(HttpContext.Session, "CartItems", CartItems);
-            return RedirectToPage("/Auth/Order");
+            return RedirectToPage("Auth/Cart"); // Chuyển hướng đến trang Order
         }
     }
 }
