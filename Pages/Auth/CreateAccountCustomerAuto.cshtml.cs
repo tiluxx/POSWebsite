@@ -7,6 +7,8 @@ namespace POSWebsite.Pages.Auth
     public class CreateAccountCustomerAutoModel : PageModel
     {
         private readonly B2BDbContrext _dbContext;
+        public List<CartItem> CartItems { get; set; }
+        public Decimal Total { get; set; }
 
         public CreateAccountCustomerAutoModel(B2BDbContrext dbContext)
         {
@@ -19,7 +21,7 @@ namespace POSWebsite.Pages.Auth
         {
         }
 
-        public IActionResult OnPost(string phoneNumber, string customerName, string address, string gender, int branchStoreId)
+        public IActionResult OnPost(string phoneNumber, string customerName, string address, string gender, int branchStoreId, string deliveryAddress)
         {
             if (!string.IsNullOrEmpty(phoneNumber) &&
                 !string.IsNullOrEmpty(customerName) &&
@@ -37,23 +39,49 @@ namespace POSWebsite.Pages.Auth
                 _dbContext.SaveChanges();
 
                 var branchStore = _dbContext.BranchStore.FirstOrDefault(b => b.Id == branchStoreId);
+                var existingCustomer = _dbContext.Customer.FirstOrDefault(c => c.TelNo == phoneNumber);
 
-                if (branchStore != null)
+                if (existingCustomer != null && branchStore != null)
                 {
-                    var order = new Order
+                    CartItems = SessionHelper.GetObjectFromJson<List<CartItem>>(HttpContext.Session, "CartItems");
+                    Total = CartItems.Sum(i => i.Product.RetailPrice * i.Quantity);
+                    if (CartItems != null)
                     {
-                        CustomerId = newCustomer.Id,
-                        DeliveryAddress = address,
-                        CreationLocationId = branchStoreId
-                    };
-                    _dbContext.Order.Add(order);
-                    _dbContext.SaveChanges();
-
-                    return RedirectToPage("/Error");
+                        var order = new Order
+                        {
+                            DeliveryAddress = deliveryAddress,
+                            TotalBill = Total,
+                            Discount = 0,
+                            ActualBill = Total * (100 - 0) / 100,
+                            CreationDate = DateTime.Now,
+                            Customer = existingCustomer,
+                            CustomerId = existingCustomer.Id,
+                            CreationLocation = branchStore,
+                            CreationLocationId = branchStore.Id
+                        };
+                        OrderDetail orderDetail;
+                        order.OrderDetails = new List<OrderDetail>();
+                        Product product;
+                        foreach (CartItem cartItem in CartItems)
+                        {
+                            product = _dbContext.Product.Find(cartItem.Product.Id);
+                            orderDetail = new OrderDetail
+                            {
+                                Product = product,
+                                Quantity = cartItem.Quantity,
+                                Discount = 0,
+                                ActualUnitPrice = cartItem.Product.RetailPrice * (100 - 0) / 100
+                            };
+                            order.OrderDetails.Add(orderDetail);
+                        }
+                        _dbContext.Order.Add(order);
+                        _dbContext.SaveChanges();
+                    }
+                    return RedirectToPage("/Auth/PurchaseSuccess");
                 }
                 else
                 {
-                    return RedirectToPage("/Auth/PurchaseSuccess");
+                    return RedirectToPage("/Error");
                 }
             }
 

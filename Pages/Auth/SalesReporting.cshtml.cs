@@ -151,6 +151,11 @@ namespace POSWebsite.Pages.Auth
             Decimal totalProdit = 0;
             foreach (Order order in orders)
             {
+                Customer? cust = _dbContext.Customer.Find(order.CustomerId);
+                if (cust != null)
+                {
+                    order.Customer = cust;
+                }
                 totalAmount += order.ActualBill;
                 orderDetails = _dbContext.OrderDetail.Where(od => od.Order.Id == order.Id).ToList();
                 numOrProducts += orderDetails.Count;

@@ -1,7 +1,30 @@
 ﻿@page
 @model POSWebsite.Pages.Auth.PurchaseSuccessModel
 
-<h2>Purchase Successful!</h2>
-
-<p>Your purchase has been processed successfully.</p>
-<!-- Add any other success message or details here -->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-none border">
+            <div class="card-body p-4">
+                <div class="wizard-content">
+                    <div class="tab-wizard wizard-circle wizard clearfix" role="application" id="steps-uid-0">
+                        <div class="content clearfix">
+                            <h6 id="steps-uid-0-h-2" tabindex="-1" class="title current">Payment</h6>
+                            <section class="payment-method text-center body current" id="steps-uid-0-p-2" role="tabpanel" aria-labelledby="steps-uid-0-h-2" aria-hidden="false" style="">
+                                <h5 class="fw-semibold fs-5">Thank you for your purchase!</h5>
+                                <h6 class="fw-semibold text-primary mb-7">Your order id: 3fa7-69e1-79b4-dbe0d35f5f5d</h6>
+                                <img src="https://demos.wrappixel.com/premium-admin-templates/bootstrap/spike-bootstrap/package/dist/images/products/payment-complete.gif" alt="" class="img-fluid mb-4" width="300">
+                                <p class="mb-0 fs-2">Plese enjoy our product.</p>
+                                <div class="d-sm-flex align-items-center justify-content-between my-4">
+                                    <a asp-area="" asp-page="/Auth/ListProduct" class="btn btn-primary d-block mb-2 mb-sm-0">
+                                        Back to Catalog
+                                    </a>
+                                    <a href="javascript:void(0)" class="btn btn-primary d-block">Print Receipt</a>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

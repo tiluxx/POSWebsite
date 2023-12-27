@@ -1,39 +1,104 @@
 ﻿@page
 @model POSWebsite.Pages.Auth.OrderModel
 
-<div class="container">
-    <h2>Your Cart</h2>
-    <form method="post" asp-page="Order" asp-page-handler="Update">
-        <table border="1">
-            <!-- Hiển thị thông tin giỏ hàng -->
-            <thead>
-                <tr>
-                    <th>Product Name</th>
-                    <th>Quantity</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model.CartItems != null && Model.CartItems.Any())
-                {
-                    @for (var i = 0; i < Model.CartItems.Count; i++)
-                    {
-                        <tr>
-                            <td>@Model.CartItems[i].Product.ProductName</td>
-                            <td>
-                                <input type="number" asp-for="@Model.CartItems[i].Quantity" />
-                            </td>
-                        </tr>
-                    }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="2">Your cart is empty.</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+<h3>Cart</h3>
 
-        <button type="submit">Update Cart</button>
-    </form>
-</div>
+<form asp-page-handler="purchase" method="post">
+    <div class="row">
+        <div class="col-12">
+            <div class="card custom-card">
+                <div class="card-body">
+                    <h5 class="card-title fw-semibold mb-4">Forms</h5>
+                    <div class="form-group mb-3">
+                        <label class="form-label" for="phoneNumber">Phone Number</label>
+                        <input placeholder="Enter your phone number" type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label" for="deliveryAddress">Delivery Address</label>
+                        <input placeholder="Enter your delivery address" type="text" class="form-control" id="deliveryAddress" name="deliveryAddress" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label" for="branchStore">Branch Store</label>
+                        <select class="form-control" id="branchStore" name="branchStoreId">
+                            @foreach (var store in Model.BranchStores)
+                            {
+                                <option value="@store.Id">@store.BranchName - @store.Address</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-none border">
+                <div class="card-body p-4">
+                    <div class="wizard-content">
+                        <div class="tab-wizard wizard-circle wizard clearfix" role="application" id="steps-uid-0">
+                            <div class="content clearfix">
+                                <h6 id="steps-uid-0-h-0" tabindex="-1" class="title current">Cart</h6>
+                                @if (Model.CartItems != null && Model.CartItems.Any())
+                                {
+                                    <section id="steps-uid-0-p-0" role="tabpanel" aria-labelledby="steps-uid-0-h-0" class="body current" aria-hidden="false">
+                                        <div class="table-responsive">
+                                            <table class="table align-middle text-nowrap mb-0">
+                                                <thead class="fs-2">
+                                                    <tr>
+                                                        <th>Product</th>
+                                                        <th>Quantity</th>
+                                                        <th class="text-end">Price</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @for (var i = 0; i < Model.CartItems.Count; i++)
+                                                    {
+                                                        <tr>
+                                                            <td class="border-bottom-0">
+                                                                <div class="d-flex align-items-center gap-3">
+                                                                    <img src="~/images/product/@Model.CartItems[i].Product.Photo" alt="" class="img-fluid rounded" width="80">
+                                                                    <div>
+                                                                        <h6 class="fw-semibold fs-4 mb-0">@Model.CartItems[i].Product.ProductName</h6>
+                                                                        <a asp-page="Cart" asp-page-handler="Delete" asp-route-id="@Model.CartItems[i].Product.Id"><i class="ti ti-trash"></i></a>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td class="border-bottom-0">
+                                                                <div class="input-group input-group-sm rounded">
+                                                                    <button class="btn minus min-width-40 py-0 border-end border-success border-end-0 text-success shadow-none" type="button" id="add1"><i class="ti ti-minus"></i></button>
+                                                                    <input type="text" style="min-width: 40px" class="min-width-40 flex-grow-0 border border-success text-success fs-3 fw-semibold form-control text-center qty" placeholder="" aria-label="Example text with button addon" aria-describedby="add1" asp-for="@Model.CartItems[i].Quantity">
+                                                                    <button class="btn min-width-40 py-0 border border-success border-start-0 text-success add shadow-none" type="button" id="addo2"><i class="ti ti-plus"></i></button>
+                                                                </div>
+                                                            </td>
+                                                            <td class="text-end border-bottom-0">
+                                                                <h6 class="fs-4 fw-semibold mb-0">$@Model.CartItems[i].Product.RetailPrice</h6>
+                                                            </td>
+                                                        </tr>
+                                                    }
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="order-summary border rounded p-4 my-4">
+                                            <div class="p-3">
+                                                <h5 class="fs-5 fw-semibold mb-4">Order Summary</h5>
+                                                <div class="d-flex justify-content-between">
+                                                    <h6 class="mb-0 fs-4 fw-semibold">Total</h6>
+                                                    <h6 class="mb-0 fs-5 fw-semibold">$@Model.Total</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                }
+                            </div>
+                            <div class="actions clearfix">
+                                <button type="submit" class="btn btn-primary">Purchase</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
