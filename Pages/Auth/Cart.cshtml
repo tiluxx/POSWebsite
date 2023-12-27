@@ -1,0 +1,62 @@
+﻿@page
+@model POSWebsite.Pages.Auth.CartModel
+
+<!-- Modal for displaying product information -->
+<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+    <!-- ... (Code của Modal như bạn đã cung cấp) ... -->
+</div>
+
+<div class="container-fluid">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-body">
+                <h2>Shopping Cart</h2>
+                <hr>
+                @if (Model.CartItems != null && Model.CartItems.Any())
+                {
+                    @foreach (var item in Model.CartItems)
+                    {
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <img src="@item.Product.Photo" alt="@item.Product.ProductName" class="img-fluid">
+                            </div>
+                            <div class="col-md-6">
+                                <h5>@item.Product.ProductName</h5>
+                                <p>Description: @item.Product.Description</p>
+                                <p>Price: @item.Product.RetailPrice</p>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-danger">Remove</button>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>Your cart is empty.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.product-img').forEach(item => {
+        item.addEventListener('click', function () {
+            const productName = this.getAttribute('data-product-name');
+            const productDescription = this.getAttribute('data-product-description');
+            const productImg = this.getAttribute('data-product-img');
+            const productRetailPrice = this.getAttribute('data-product-retail-price');
+
+            document.getElementById('productName').innerText = productName;
+            document.getElementById('productDescription').innerText = productDescription;
+            document.getElementById('productRetailPrice').innerText = `Giá bán lẻ: ${productRetailPrice}`;
+            document.getElementById('productImg').src = productImg;
+
+            document.getElementById('addToCartBtn').addEventListener('click', function () {
+                // Handle adding to cart
+                window.location.href = '/Auth/ListProduct';
+            });
+        });
+    });
+</script>

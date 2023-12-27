@@ -1,0 +1,59 @@
+﻿@page
+@model POSWebsite.Pages.Auth.PurchaseModel
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Purchase Details</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .custom-card {
+            margin-top: 20px;
+        }
+
+        .card-title {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="card custom-card">
+            <div class="card-header">
+                <h2 class="card-title">Purchase Details</h2>
+            </div>
+            <div class="card-body">
+                <h3>Product Information</h3>
+                <p><strong>Name:</strong> @Model.SelectedProduct.ProductName</p>
+                <p><strong>Description:</strong> @Model.SelectedProduct.Description</p>
+                <p><strong>Retail Price:</strong> @Model.SelectedProduct.RetailPrice</p>
+                <p><strong>Quantity:</strong> <span id="quantity">1</span></p>
+                <form method="post">
+                    <div class="form-group">
+                        <label for="phoneNumber">Phone Number</label>
+                        <input placeholder="Enter your phone number"type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="branchStore">Branch Store:</label>
+                        <select class="form-control" id="branchStore" name="branchStore">
+                            @foreach (var store in Model.BranchStores)
+                            {
+                                <option value="@store.Id">@store.BranchName - @store.Address</option>
+                            }
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Purchase</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function increaseQuantity() {
+            var quantityElement = document.getElementById('quantity');
+            var currentQuantity = parseInt(quantityElement.innerText);
+            quantityElement.innerText = currentQuantity + 1;
+        }
+    </script>
+</body>
+</html>

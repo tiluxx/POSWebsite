@@ -72,5 +72,7 @@ namespace POSWebsite.Models
         public DbSet<Order> Order { get; set; }
         public DbSet<OrderDetail> OrderDetail { get; set; }
         public DbSet<Staff> Staff { get; set; }
+
+        public DbSet<CartItem> CartItems { get; set; }
     }
 }

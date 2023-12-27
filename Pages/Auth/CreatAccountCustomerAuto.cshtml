@@ -1,0 +1,36 @@
+﻿@page
+@model POSWebsite.Pages.Auth.CreatAccountCustomerAutoModel
+@{
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Account</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid">
+        <h2>Create Account</h2>
+        <form method="post">
+            <input type="hidden" asp-for="PhoneNumber" />
+            <div class="form-group">
+                <label for="customerName">Full Name:</label>
+                <input type="text" class="form-control" id="customerName" name="customerName" required>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select class="form-control" id="gender" name="gender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <input type="text" class="form-control" id="address" name="address" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Create Account and Purchase</button>
+        </form>
+    </div>
+</body>
+</html>

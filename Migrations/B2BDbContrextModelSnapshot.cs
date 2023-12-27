@@ -103,6 +103,27 @@ namespace POSWebsite.Migrations
                     b.ToTable("BranchStore");
                 });
 
+            modelBuilder.Entity("POSWebsite.Models.CartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("CartItems");
+                });
+
             modelBuilder.Entity("POSWebsite.Models.Customer", b =>
                 {
                     b.Property<int>("Id")
@@ -329,6 +350,17 @@ namespace POSWebsite.Migrations
                         .IsRequired();
 
                     b.Navigation("Staff");
+                });
+
+            modelBuilder.Entity("POSWebsite.Models.CartItem", b =>
+                {
+                    b.HasOne("POSWebsite.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("POSWebsite.Models.Order", b =>

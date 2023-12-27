@@ -12,8 +12,8 @@ using POSWebsite.Models;
 namespace POSWebsite.Migrations
 {
     [DbContext(typeof(B2BDbContrext))]
-    [Migration("20231226035759_AddPhotoToDatabase")]
-    partial class AddPhotoToDatabase
+    [Migration("20231226194251_CartItemToDatabase")]
+    partial class CartItemToDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -104,6 +104,27 @@ namespace POSWebsite.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("BranchStore");
+                });
+
+            modelBuilder.Entity("POSWebsite.Models.CartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("POSWebsite.Models.Customer", b =>
@@ -332,6 +353,17 @@ namespace POSWebsite.Migrations
                         .IsRequired();
 
                     b.Navigation("Staff");
+                });
+
+            modelBuilder.Entity("POSWebsite.Models.CartItem", b =>
+                {
+                    b.HasOne("POSWebsite.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("POSWebsite.Models.Order", b =>
