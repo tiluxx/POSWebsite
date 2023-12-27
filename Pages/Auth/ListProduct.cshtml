@@ -104,13 +104,9 @@
                     productImg: productImg,
                     productRetailPrice: productRetailPrice
                 });
+                sessionStorage.setItem('CartItems', JSON.stringify(cartItems));
                 alert('Đã thêm sản phẩm vào giỏ hàng!');
             });
         });
-    });
-
-    document.getElementById('orderBtn').addEventListener('click', function () {
-        localStorage.setItem('cartItems', JSON.stringify(cartItems));
-        window.location.href = '/Auth/Order';
     });
 </script>

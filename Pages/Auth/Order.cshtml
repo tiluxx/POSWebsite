@@ -2,5 +2,38 @@
 @model POSWebsite.Pages.Auth.OrderModel
 
 <div class="container">
-    <h2>Giỏ hàng của bạn</h2>
+    <h2>Your Cart</h2>
+    <form method="post" asp-page="Order" asp-page-handler="Update">
+        <table border="1">
+            <!-- Hiển thị thông tin giỏ hàng -->
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.CartItems != null && Model.CartItems.Any())
+                {
+                    @for (var i = 0; i < Model.CartItems.Count; i++)
+                    {
+                        <tr>
+                            <td>@Model.CartItems[i].ProductName</td>
+                            <td>
+                                <input type="number" asp-for="@Model.CartItems[i].Quantity" />
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="2">Your cart is empty.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <button type="submit">Update Cart</button>
+    </form>
 </div>
