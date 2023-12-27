@@ -9,10 +9,11 @@ public class EditProductModel : PageModel
     private readonly B2BDbContrext _dbContext;
     private readonly ILogger<EditProductModel> _logger;
 
-    [BindProperty]
+    /*[BindProperty]
+    public Product Product { get; set; }*/
     public Product Product { get; set; }
 
-    public EditProductModel(B2BDbContrext dbContext, ILogger<EditProductModel> logger)
+    public EditProductModel(ILogger<EditProductModel> logger, B2BDbContrext dbContext)
     {
         _dbContext = dbContext;
         _logger = logger;
@@ -32,69 +33,51 @@ public class EditProductModel : PageModel
         return Page();
     }
 
-    public async Task<IActionResult> OnPostAsync()
+    public async Task<IActionResult> OnPostAsync(string productName, string barcode, string retailPrice, string category, string description, string productId)
     {
-        ModelState.Remove("Product.OrderDetails");
-        ModelState.Remove("Product.ProductBranches");
+        /*ModelState.Remove("Product.OrderDetails");
+        ModelState.Remove("Product.ProductBranches");*/
 
         if (!ModelState.IsValid)
         {
-            foreach (var modelState in ModelState.Values)
+            /*foreach (var modelState in ModelState.Values)
             {
                 foreach (var error in modelState.Errors)
                 {
                     _logger.LogError($"ModelState Error: {error.ErrorMessage}");
                 }
-            }
+            }*/
 
             return Page();
         }
 
         try
         {
-            var existingProduct = await _dbContext.Product
-                .Where(p => p.Id == Product.Id)
-                .Select(p => new Product
-                {
-                    Id = p.Id,
-                    ProductName = p.ProductName,
-                    Barcode = p.Barcode,
-                    UnitPrice = p.UnitPrice,
-                    ImportPrice = p.ImportPrice,
-                    RetailPrice = p.RetailPrice,
-                    Category = p.Category,
-                    Description = p.Description,
-                    Photo = p.Photo
-                })
-                .FirstOrDefaultAsync();
+            var existingProduct = await _dbContext.Product.Where(p => p.Id.ToString() == productId).FirstOrDefaultAsync();
 
             if (existingProduct != null)
             {
-                existingProduct.ProductName = Product.ProductName;
-                existingProduct.Barcode = Product.Barcode;
-                existingProduct.UnitPrice = Product.UnitPrice;
-                existingProduct.ImportPrice = Product.ImportPrice;
-                existingProduct.RetailPrice = Product.RetailPrice;
-                existingProduct.Category = Product.Category;
-                existingProduct.Description = Product.Description;
-                existingProduct.Photo = Product.Photo;
+                existingProduct.ProductName = productName;
+                existingProduct.Barcode = barcode;
+                existingProduct.RetailPrice = Convert.ToDecimal(retailPrice);
+                existingProduct.Category = category;
+                existingProduct.Description = description;
 
                 _dbContext.Product.Update(existingProduct);
                 await _dbContext.SaveChangesAsync();
 
-                _logger.LogInformation("Dữ liệu đã được cập nhật thành công!");
+                _logger.LogInformation("The product is updated successfully!");
 
                 return RedirectToPage("/Auth/ListProduct");
             }
             else
             {
-
                 return NotFound();
             }
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Lỗi khi cập nhật dữ liệu!");
+            _logger.LogError(ex, "An error occurred when we' trying to update this product!");
             throw;
         }
     }

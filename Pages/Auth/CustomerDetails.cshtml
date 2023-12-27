@@ -1,29 +1,145 @@
 ﻿@page "{id:int}"
+@using Models
 @model POSWebsite.Pages.Auth.CustomerDetailsModel
 
 @{
     ViewData["Title"] = "Customer Details";
 }
 
-<div class="card">
-    <div class="card-header">
-        <h5 class="card-title">Customer Details</h5>
-    </div>
-    <div class="card-body">
-        @if (Model.Customer != null)
-        {
-            <div>
-                <h2>@Model.Customer.Fullname</h2>
-                <p>Gender: @Model.Customer.Gender</p>
-                <p>Tel No: @Model.Customer.TelNo</p>
-                <p>Address: @Model.Customer.Address</p>
-                <p>Creation Date: @Model.Customer.CreationDate.ToShortDateString()</p>
-                <!-- Other customer details you want to display -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-md-flex justify-content-between mb-10">
+                    <div class="mb-10 mb-md-0">
+                        <h5 class="card-title">Customer Details</h5>
+                    </div>
+                </div>
+                <div class="d-md-flex justify-content-between mb-10">
+                    <div class="d-flex align-items-center">
+                        @if (Model.Customer != null)
+                        {
+                            <div>
+                                <h2>@Model.Customer.Fullname</h2>
+                                <p>Gender: @Model.Customer.Gender</p>
+                                <p>Tel No: @Model.Customer.TelNo</p>
+                                <p>Address: @Model.Customer.Address</p>
+                                <p>Creation Date: @Model.Customer.CreationDate.ToShortDateString()</p>
+                                <!-- Other customer details you want to display -->
+                            </div>
+                        }
+                        else
+                        {
+                            <p>Customer not found.</p>
+                        }
+                    </div>
+                </div>
+                
             </div>
-        }
-        else
-        {
-            <p>Customer not found.</p>
-        }
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card mb-0">
+            <div class="card-body">
+                <div class="d-md-flex justify-content-between mb-10">
+                    <div class="mb-10 mb-md-0">
+                        <h5 class="card-title">Purchase History</h5>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <form class="position-relative me-3 w-100">
+                            <input type="text" class="form-control search-chat py-2 ps-5" id="text-srh" placeholder="Search">
+                            <i class="ti ti-search position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i>
+                        </form>
+                        <div class="dropdown">
+                            <a href="#" class="btn border shadow-none px-3" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="ti ti-dots-vertical fs-5"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="">
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-3" href="#"><i class="fs-4 ti ti-plus"></i>Add</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-3" href="#"><i class="fs-4 ti ti-edit"></i>Edit</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-3" href="#"><i class="fs-4 ti ti-trash"></i>Delete</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive overflow-x-auto latest-reviews-table">
+                    <table class="table mb-0 align-middle text-nowrap">
+                        <thead class="text-dark fs-4">
+                            <tr>
+                                <th>Order Code</th>
+                                <th>Customer</th>
+                                <th>Total</th>
+                                <th>Discount</th>
+                                <th>Final Payment</th>
+                                <th>Created Date</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (Order order in Model.Orders)
+                            {
+                                <tr>
+                                    <td>
+                                        <p class="mb-0">Order @order.Id</p>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center text-truncate">
+                                            <img src="https://firebasestorage.googleapis.com/v0/b/b2b-solution-app.appspot.com/o/profile_pictures%2Fdefault_female.jpg?alt=media&token=f28e1736-5216-41de-ab2d-e6a3eb16ed19" alt="" class="img-fluid rounded-circle flex-shrink-0" width="32" height="32">
+                                            <div class="ms-7">
+                                                <h5 class="mb-1 fs-4">@order.Customer.Fullname</h5>
+                                                <h6 class="mb-0 fw-light">@order.Customer.TelNo</h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0">$@order.TotalBill</p>
+                                    </td>
+                                    <td>
+                                        <span class="badge rounded-pill bg-light-success text-success border-success border">
+                                            -@order.Discount%
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0">$@order.ActualBill</p>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0">@order.CreationDate.ToString("R")</p>
+                                    </td>
+                                    <td>
+                                        <div class="dropdown dropstart">
+                                            <a href="#" class="text-muted " id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ti ti-dots-vertical fs-5"></i>
+                                            </a>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
+                                                <li>
+                                                    <a asp-area=""
+                                                       asp-page="/Auth/OrderDetail"
+                                                       asp-route-id="@order.Id" class="dropdown-item d-flex align-items-center gap-3"><i class="fs-6 ti ti-eye"></i>View</a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center gap-3" href="#"><i class="fs-6 ti ti-edit"></i>Edit</a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center gap-3" href="#"><i class="fs-6 ti ti-trash"></i>Delete</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
