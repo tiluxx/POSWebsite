@@ -33,12 +33,6 @@
         <div class="card">
             <div class="card-body mb-3">
                 <a asp-area="" asp-page="/Auth/AddProduct" class="btn btn-success">Add Product</a>
-                <!--<form method="get">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search by name" name="SearchName">
-                        <button class="btn btn-outline-primary" type="submit">Search</button>
-                    </div>
-                </form> -->
                 <form method="post" action="/Auth/Order">
                     <div class="mb-3">
                         <label for="barcode" class="form-label">Enter Barcode:</label>
@@ -66,6 +60,9 @@
                                                 <input type="hidden" name="productId" value="@product.Id" />
                                                 <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this product?')">Delete</button>
                                             </form>
+                                            <td>
+                                                <a asp-page="Cart" asp-page-handler="Buynow" asp-route-id="@product.Id">Buy Now</a>
+                                            </td>
                                         </div>
                                     </div>
                                 </div>
@@ -95,18 +92,6 @@
             document.getElementById('productDescription').innerText = productDescription;
             document.getElementById('productRetailPrice').innerText = `Giá bán lẻ: ${productRetailPrice}`;
             document.getElementById('productImg').src = productImg;
-
-            document.getElementById('addToCartBtn').addEventListener('click', function () {
-                cartItems.push({
-                    productId: productId,
-                    productName: productName,
-                    productDescription: productDescription,
-                    productImg: productImg,
-                    productRetailPrice: productRetailPrice
-                });
-                sessionStorage.setItem('CartItems', JSON.stringify(cartItems));
-                alert('Đã thêm sản phẩm vào giỏ hàng!');
-            });
         });
     });
 </script>

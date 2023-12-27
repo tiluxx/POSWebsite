@@ -62,6 +62,8 @@ namespace POSWebsite.Models
                 .WithMany(product => product.OrderDetails)
                 .HasForeignKey(orderDetail => orderDetail.ProductId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<CartItem>().HasKey(c => c.Id);
         }
 
         public DbSet<Account> Account { get; set; }
