@@ -1,8 +1,10 @@
 ﻿@page
 @using Models
+@using System.Security.Claims;
 @model POSWebsite.Pages.Auth.SalesReportingModel
 @{
     ViewData["Title"] = "Sales Reporting";
+    string accountRole = User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).FirstOrDefault() ?? "User";
 }
 
 <div class="card mb-3 d-none d-lg-block">
@@ -76,6 +78,25 @@
     <div class="row">
         <div>
             <div class="row">
+                @if (accountRole == "Admin" || accountRole == "Manager")
+                {
+                    <div class="col-sm-12 d-flex align-items-stretch">
+                        <div class="card w-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h5 class="card-title mb-1 fw-semibold">Total Profit</h5>
+                                        <p class="mb-0">@Model.GetResponseStatus().SalesReport.TypeOfTimeline</p>
+                                    </div>
+                                    <div>
+                                        <h5 class="card-title mb-1 fw-semibold text-end">@Model.GetResponseStatus().SalesReport.TotalProfit</h5>
+                                        <span class="badge rounded-pill bg-light-success text-success border-success border text-end">5.2%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
                 <div class="col-sm-6 d-flex align-items-stretch">
                     <div class="card w-100">
                         <div class="card-body">

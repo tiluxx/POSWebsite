@@ -7,9 +7,9 @@ namespace POSWebsite.Pages.Auth
 {
     public class OrderModel : PageModel
     {
-        private readonly B2BDbContext _dbContext;
+        private readonly B2BDbContrext _dbContext;
 
-        public OrderModel(B2BDbContext dbContext)
+        public OrderModel(B2BDbContrext dbContext)
         {
             _dbContext = dbContext;
         }

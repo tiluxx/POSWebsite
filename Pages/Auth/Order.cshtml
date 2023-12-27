@@ -18,7 +18,7 @@
                     @for (var i = 0; i < Model.CartItems.Count; i++)
                     {
                         <tr>
-                            <td>@Model.CartItems[i].ProductName</td>
+                            <td>@Model.CartItems[i].Product.ProductName</td>
                             <td>
                                 <input type="number" asp-for="@Model.CartItems[i].Quantity" />
                             </td>
