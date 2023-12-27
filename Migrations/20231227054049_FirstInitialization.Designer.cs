@@ -12,8 +12,8 @@ using POSWebsite.Models;
 namespace POSWebsite.Migrations
 {
     [DbContext(typeof(B2BDbContrext))]
-    [Migration("20231226194251_CartItemToDatabase")]
-    partial class CartItemToDatabase
+    [Migration("20231227054049_FirstInitialization")]
+    partial class FirstInitialization
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

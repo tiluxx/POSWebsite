@@ -25,6 +25,8 @@ namespace POSWebsite
                     options.AccessDeniedPath = "/Forbidden";
                 });
 
+            builder.Services.AddSession();
+
             var app = builder.Build();
 
             app.UseStatusCodePagesWithReExecute("/Error/{0}");
@@ -46,6 +48,8 @@ namespace POSWebsite
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.MapRazorPages();
 

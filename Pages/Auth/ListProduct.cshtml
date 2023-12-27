@@ -33,6 +33,19 @@
         <div class="card">
             <div class="card-body mb-3">
                 <a asp-area="" asp-page="/Auth/AddProduct" class="btn btn-success">Add Product</a>
+                <!--<form method="get">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search by name" name="SearchName">
+                        <button class="btn btn-outline-primary" type="submit">Search</button>
+                    </div>
+                </form> -->
+                <form method="post" action="/Auth/Order">
+                    <div class="mb-3">
+                        <label for="barcode" class="form-label">Enter Barcode:</label>
+                        <input type="text" class="form-control" id="barcode" name="barcode">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add by Barcode</button>
+                </form>
             </div>
 
             <div class="card-body">
@@ -67,6 +80,8 @@
 </div>
 
 <script>
+    let cartItems = [];
+
     document.querySelectorAll('.product-img').forEach(item => {
         item.addEventListener('click', function () {
             const productId = this.getAttribute('data-product-id');
@@ -82,8 +97,20 @@
             document.getElementById('productImg').src = productImg;
 
             document.getElementById('addToCartBtn').addEventListener('click', function () {
-                window.location.href = '/Auth/Purchase?selectedProductId=' + productId;
+                cartItems.push({
+                    productId: productId,
+                    productName: productName,
+                    productDescription: productDescription,
+                    productImg: productImg,
+                    productRetailPrice: productRetailPrice
+                });
+                alert('Đã thêm sản phẩm vào giỏ hàng!');
             });
         });
+    });
+
+    document.getElementById('orderBtn').addEventListener('click', function () {
+        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+        window.location.href = '/Auth/Order';
     });
 </script>

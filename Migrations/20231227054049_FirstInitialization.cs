@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace POSWebsite.Migrations
 {
     /// <inheritdoc />
-    public partial class CartItemToDatabase : Migration
+    public partial class FirstInitialization : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

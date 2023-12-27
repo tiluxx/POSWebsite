@@ -1,0 +1,31 @@
+﻿@page
+@model POSWebsite.Pages.Auth.AddProductBarcodeModel
+@{
+}
+<form method="post">
+    <div class="mb-3">
+        <label for="barcode" class="form-label">Barcode:</label>
+        <input type="text" class="form-control" id="barcode" name="barcode">
+        <span asp-validation-for="Product.Barcode" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary" onclick="addByBarcode()">Add by Barcode</button>
+</form>
+
+<script>
+    function addByBarcode() {
+        var barcode = document.getElementById('barcode').value;
+        fetch('/Auth/AddProductBarcode?handler=Barcode', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'barcode=' + barcode,
+        }).then(response => {
+            if (response.ok) {
+                window.location.href = '/Auth/ListProduct';
+            } else {
+            }
+        });
+    }
+</script>

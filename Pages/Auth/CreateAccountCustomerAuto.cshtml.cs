@@ -4,11 +4,11 @@ using POSWebsite.Models;
 
 namespace POSWebsite.Pages.Auth
 {
-    public class CreatAccountCustomerAutoModel : PageModel
+    public class CreateAccountCustomerAutoModel : PageModel
     {
         private readonly B2BDbContrext _dbContext;
 
-        public CreatAccountCustomerAutoModel(B2BDbContrext dbContext)
+        public CreateAccountCustomerAutoModel(B2BDbContrext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -19,7 +19,7 @@ namespace POSWebsite.Pages.Auth
         {
         }
 
-        public IActionResult OnPost(string phoneNumber, string customerName, string address, string gender)
+        public IActionResult OnPost(string phoneNumber, string customerName, string address, string gender, int branchStoreId)
         {
             if (!string.IsNullOrEmpty(phoneNumber) &&
                 !string.IsNullOrEmpty(customerName) &&
@@ -36,18 +36,29 @@ namespace POSWebsite.Pages.Auth
                 _dbContext.Customer.Add(newCustomer);
                 _dbContext.SaveChanges();
 
-                var order = new Order
-                {
-                    CustomerId = newCustomer.Id,
-                    DeliveryAddress = address
-                };
-                _dbContext.Order.Add(order);
-                _dbContext.SaveChanges();
+                var branchStore = _dbContext.BranchStore.FirstOrDefault(b => b.Id == branchStoreId);
 
-                return RedirectToPage("/Auth/PurchaseSuccess");
+                if (branchStore != null)
+                {
+                    var order = new Order
+                    {
+                        CustomerId = newCustomer.Id,
+                        DeliveryAddress = address,
+                        CreationLocationId = branchStoreId
+                    };
+                    _dbContext.Order.Add(order);
+                    _dbContext.SaveChanges();
+
+                    return RedirectToPage("/Error");
+                }
+                else
+                {
+                    return RedirectToPage("/Auth/PurchaseSuccess");
+                }
             }
 
             return Page();
         }
+
     }
 }

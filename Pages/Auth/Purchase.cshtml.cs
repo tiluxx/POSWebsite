@@ -19,16 +19,20 @@ namespace POSWebsite.Pages.Auth
 
         public Product SelectedProduct { get; set; }
 
+        public List<Product> SelectedProducts { get; set; }
         public List<BranchStore> BranchStores { get; set; }
 
-        public IActionResult OnGet()
+        public IActionResult OnGet(int[] selectedProductIds)
         {
             SelectedProduct = _dbContext.Product.Find(SelectedProductId);
+            Console.WriteLine(SelectedProductId);
 
             if (SelectedProduct == null)
             {
+
                 return RedirectToPage("/Error");
             }
+
             BranchStores = _dbContext.BranchStore.ToList();
             return Page();
         }
@@ -52,13 +56,11 @@ namespace POSWebsite.Pages.Auth
                 }
                 else
                 {
-                    return RedirectToPage("/Auth/CreatAccountCustomerAuto", new { phoneNumber = phoneNumber, deliveryAddress = deliveryAddress });
+                    return RedirectToPage("/Auth/CreatAccountCustomerAuto", new { phoneNumber = phoneNumber, customerName = "", address = "", gender = "", branchStoreId = branchStoreId });
                 }
-
-                return RedirectToPage("/Auth/PurchaseSuccess");
             }
 
             return RedirectToPage("/Auth/Purchase");
-        } 
+        }
     }
 }

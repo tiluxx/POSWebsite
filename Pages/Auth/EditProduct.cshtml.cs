@@ -20,13 +20,11 @@ public class EditProductModel : PageModel
 
     public IActionResult OnGet(int id)
     {
-        _logger.LogInformation($"Received Id: {id}");
 
         Product = _dbContext.Product.FirstOrDefault(p => p.Id == id);
 
         if (Product == null)
         {
-            _logger.LogWarning($"Product with Id {id} does not exist.");
 
             return NotFound();
         }
@@ -51,8 +49,6 @@ public class EditProductModel : PageModel
 
             return Page();
         }
-
-        _logger.LogInformation($"Received ProductName from form: {Product.ProductName}");
 
         try
         {
@@ -92,7 +88,6 @@ public class EditProductModel : PageModel
             }
             else
             {
-                _logger.LogWarning($"Product with Id {Product.Id} does not exist.");
 
                 return NotFound();
             }

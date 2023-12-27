@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace POSWebsite.Pages.Auth
 {
@@ -31,6 +32,30 @@ namespace POSWebsite.Pages.Auth
                 Products = _dbContext.Product.ToList() ?? new List<Product>();
             }
         }
+
+        /* [BindProperty(SupportsGet = true)]
+        public string SearchName { get; set; }
+
+        public async Task OnGetAsync(List<Product> products = null, string searchName = null)
+        {
+            IQueryable<Product> productsQuery = _dbContext.Product;
+
+            if (products != null && products.Any())
+            {
+                Products = products;
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(searchName))
+                {
+                    // Filter products by name using case-insensitive search
+                    productsQuery = productsQuery.Where(p => p.ProductName.Contains(searchName, StringComparison.OrdinalIgnoreCase));
+                }
+
+                Products = await productsQuery.ToListAsync();
+            }
+        } */
+
 
 
         public IActionResult OnGetEditProduct(int productId)

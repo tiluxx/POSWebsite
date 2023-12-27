@@ -3,6 +3,8 @@
 @{
     ViewData["Title"] = "Edit Product";
 }
+@using System.IO
+
 
 <div class="container mt-4">
     <div class="card">
@@ -46,10 +48,21 @@
                             <textarea class="form-control" id="description" asp-for="Product.Description"></textarea>
                             <span asp-validation-for="Product.Description" class="text-danger"></span>
                         </div>
+                        @{
+                            string imageUrl = Model.Product.Photo;
+                            string imageName = imageUrl != null ? imageUrl.Substring(imageUrl.LastIndexOf('/') + 1) : string.Empty;
+                        }
+
                         <div class="mb-3">
                             <label for="photo" class="form-label">Product Photo:</label>
-                            <input type="file" class="form-control" id="photo" name="photo">
+                            @if (!string.IsNullOrEmpty(Model.Product.Photo))
+                            {
+                                <img src="@Url.Content(Model.Product.Photo)" alt="Current Photo" style="max-width: 200px;" />
+                            }
+                            <input type="file" class="form-control" id="photo" name="photo" value="@imageName">
                         </div>
+
+
 
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary">Update Product</button>

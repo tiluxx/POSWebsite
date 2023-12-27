@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop.Infrastructure;
 using POSWebsite.Models;
 using System;
@@ -45,7 +46,7 @@ namespace POSWebsite.Pages.Auth
                 _dbContext.Product.Add(Product);
                 await _dbContext.SaveChangesAsync();
 
-                var updateProducts = _dbContext.Product.ToList();
+                var updateProducts = _dbContext.Product.ToListAsync();
                 return RedirectToPage("/Auth/ListProduct", new { products = updateProducts });
             }
             catch (Exception ex)
