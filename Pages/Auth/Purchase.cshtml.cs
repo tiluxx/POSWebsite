@@ -33,7 +33,7 @@ namespace POSWebsite.Pages.Auth
             return Page();
         }
 
-        public IActionResult OnPost(string phoneNumber, string deliveryAddress)
+        public IActionResult OnPost(string phoneNumber, string deliveryAddress, int branchStoreId)
         {
             if (!string.IsNullOrEmpty(phoneNumber) && !string.IsNullOrEmpty(deliveryAddress))
             {
@@ -44,14 +44,15 @@ namespace POSWebsite.Pages.Auth
                     var order = new Order
                     {
                         CustomerId = existingCustomer.Id,
-                        DeliveryAddress = deliveryAddress // Set the delivery address here
+                        DeliveryAddress = deliveryAddress,
+                        CreationLocationId = branchStoreId
                     };
                     _dbContext.Order.Add(order);
                     _dbContext.SaveChanges();
                 }
                 else
                 {
-                    return RedirectToPage("/Auth/CreatAccountCustomerAuto", new { phoneNumber = phoneNumber });
+                    return RedirectToPage("/Auth/CreatAccountCustomerAuto", new { phoneNumber = phoneNumber, deliveryAddress = deliveryAddress });
                 }
 
                 return RedirectToPage("/Auth/PurchaseSuccess");

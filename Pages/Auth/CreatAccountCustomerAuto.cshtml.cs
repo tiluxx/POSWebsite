@@ -19,19 +19,19 @@ namespace POSWebsite.Pages.Auth
         {
         }
 
-        public IActionResult OnPost(string customerName, string address, string gender)
+        public IActionResult OnPost(string phoneNumber, string customerName, string address, string gender)
         {
-            if (!string.IsNullOrEmpty(PhoneNumber) &&
+            if (!string.IsNullOrEmpty(phoneNumber) &&
                 !string.IsNullOrEmpty(customerName) &&
                 !string.IsNullOrEmpty(address) &&
-                !string.IsNullOrEmpty(gender)) // Ensure gender is not null or empty
+                !string.IsNullOrEmpty(gender))
             {
                 var newCustomer = new Customer
                 {
-                    TelNo = PhoneNumber,
+                    TelNo = phoneNumber,
                     Fullname = customerName,
                     Address = address,
-                    Gender = gender  // Assign the gender value
+                    Gender = gender
                 };
                 _dbContext.Customer.Add(newCustomer);
                 _dbContext.SaveChanges();
@@ -39,7 +39,7 @@ namespace POSWebsite.Pages.Auth
                 var order = new Order
                 {
                     CustomerId = newCustomer.Id,
-                    DeliveryAddress = address // Assign the delivery address value
+                    DeliveryAddress = address
                 };
                 _dbContext.Order.Add(order);
                 _dbContext.SaveChanges();
@@ -49,7 +49,5 @@ namespace POSWebsite.Pages.Auth
 
             return Page();
         }
-
-
     }
 }
