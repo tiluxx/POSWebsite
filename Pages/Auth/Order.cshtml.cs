@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using POSWebsite.Models;
+using POSWebsite.Utils;
 using System.Net;
 
 namespace POSWebsite.Pages.Auth
@@ -11,11 +12,15 @@ namespace POSWebsite.Pages.Auth
     {
         private readonly ILogger<OrderModel> _logger;
         private readonly B2BDbContrext _dbContext;
+        private readonly IVnPayController _vnPayController;
+        private decimal _totalAmount = 2000000; // The safe limit to perform test on VNPay
+        public List<OrderDetail> orderDetailParameterList = new List<OrderDetail>();
 
-        public OrderModel(ILogger<OrderModel> logger, B2BDbContrext dbContext)
+        public OrderModel(ILogger<OrderModel> logger, B2BDbContrext dbContext, IVnPayController vnPayController)
         {
             _logger = logger;
             _dbContext = dbContext;
+            _vnPayController = vnPayController;
         }
 
         public List<CartItem> CartItems { get; set; }
@@ -88,6 +93,7 @@ namespace POSWebsite.Pages.Auth
 
         public IActionResult OnPostPurchase(string phoneNumber, string deliveryAddress, string branchStoreId)
         {
+            int orderId = 0;
             if (!string.IsNullOrEmpty(phoneNumber) && !string.IsNullOrEmpty(deliveryAddress))
             {
                 var existingCustomer = _dbContext.Customer.FirstOrDefault(c => c.TelNo == phoneNumber);
@@ -128,6 +134,8 @@ namespace POSWebsite.Pages.Auth
                         }
                         _dbContext.Order.Add(order);
                         _dbContext.SaveChanges();
+
+                        orderId = order.Id;
                     }
                 }
                 else
@@ -136,7 +144,11 @@ namespace POSWebsite.Pages.Auth
                 }
             }
 
-            return RedirectToPage("/Auth/PurchaseSuccess");
+            Payment payment = new Payment(orderId.ToString(), _totalAmount);
+            string url = _vnPayController.CreatePaymentUrl(payment, HttpContext);
+
+            return Redirect(url);
+            /*return RedirectToPage("/Auth/PurchaseSuccess");*/
         }
 
         public IActionResult OnPostUpdate(int[] quantities)
@@ -148,6 +160,13 @@ namespace POSWebsite.Pages.Auth
             }
             SessionHelper.SetObjectAsJson(HttpContext.Session, "CartItems", CartItems);
             return RedirectToPage("/Auth/Order");
+        }
+
+        public IActionResult OnGetPaymentCallback()
+        {
+            PaymentResponse response = _vnPayController.PaymentExecute(Request.Query);
+
+            return RedirectToPage("/Auth/PurchaseSuccess", new { orderId = response.OrderId });
         }
 
         private int Exists(List<CartItem> cart, string id)

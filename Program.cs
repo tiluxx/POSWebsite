@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using POSWebsite.Models;
+using POSWebsite.Utils;
 
 namespace POSWebsite
 {
@@ -25,6 +27,9 @@ namespace POSWebsite
                     options.AccessDeniedPath = "/Forbidden";
                 });
 
+            builder.Services.AddScoped<PDFGenerator>();
+            builder.Services.AddScoped<IVnPayController, VnPayController>();
+            builder.Services.AddTransient<IEmailSender, EmailSender>();
             builder.Services.AddSession();
 
             var app = builder.Build();

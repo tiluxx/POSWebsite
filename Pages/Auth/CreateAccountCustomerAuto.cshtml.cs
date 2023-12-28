@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using POSWebsite.Models;
+using POSWebsite.Utils;
 
 namespace POSWebsite.Pages.Auth
 {
     public class CreateAccountCustomerAutoModel : PageModel
     {
         private readonly B2BDbContrext _dbContext;
+        private readonly IVnPayController _vnPayController;
+        private decimal _totalAmount = 2000000; // The safe limit to perform test on VNPay
         public List<CartItem> CartItems { get; set; }
         public Decimal Total { get; set; }
 
@@ -43,6 +46,7 @@ namespace POSWebsite.Pages.Auth
 
                 if (existingCustomer != null && branchStore != null)
                 {
+                    int orderId = 0;
                     CartItems = SessionHelper.GetObjectFromJson<List<CartItem>>(HttpContext.Session, "CartItems");
                     Total = CartItems.Sum(i => i.Product.RetailPrice * i.Quantity);
                     if (CartItems != null)
@@ -76,8 +80,14 @@ namespace POSWebsite.Pages.Auth
                         }
                         _dbContext.Order.Add(order);
                         _dbContext.SaveChanges();
+
+                        orderId = order.Id;
                     }
-                    return RedirectToPage("/Auth/PurchaseSuccess");
+
+                    Payment payment = new Payment(orderId.ToString(), _totalAmount);
+                    string url = _vnPayController.CreatePaymentUrl(payment, HttpContext);
+
+                    return Redirect(url);
                 }
                 else
                 {
@@ -87,6 +97,5 @@ namespace POSWebsite.Pages.Auth
 
             return Page();
         }
-
     }
 }

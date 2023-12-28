@@ -18,7 +18,10 @@
                                     <a asp-area="" asp-page="/Auth/ListProduct" class="btn btn-primary d-block mb-2 mb-sm-0">
                                         Back to Catalog
                                     </a>
-                                    <a href="javascript:void(0)" class="btn btn-primary d-block">Print Receipt</a>
+                                    <a asp-area=""
+                                       asp-page="/Auth/PurchaseSuccess"
+                                       asp-page-handler="PrintReport"
+                                       asp-route-orderid="@Model.GetOrderId()" class="btn btn-primary d-block">Print Receipt</a>
                                 </div>
                             </section>
                         </div>

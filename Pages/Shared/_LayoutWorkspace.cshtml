@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Solution</title>
+    <title>@ViewData["Title"] Solution</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     @* <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> *@
     <link rel="stylesheet" href="~/DotNetTechWebFormProject.styles.css" asp-append-version="true" />
@@ -66,6 +66,21 @@
                                 <span class="hide-menu ms-2 ps-1">Staff</span>
                             </a>
                         </li>
+                        <li class="nav-small-cap">
+                            <i class="ti ti-dots nav-small-cap-icon fs-5"></i>
+                            <span class="hide-menu">Products</span>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link sidebar-link indigo-hover-bg"
+                               asp-area=""
+                               asp-page="/Auth/AddProduct"
+                               aria-expanded="false">
+                                <span class="aside-icon p-2 bg-light-indigo rounded-3">
+                                    <i class="ti ti-square-plus fs-7 text-indigo"></i>
+                                </span>
+                                <span class="hide-menu ms-2 ps-1">Import product</span>
+                            </a>
+                        </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link sidebar-link indigo-hover-bg"
                                asp-area=""
@@ -74,7 +89,7 @@
                                 <span class="aside-icon p-2 bg-light-indigo rounded-3">
                                     <i class="ti ti-square-plus fs-7 text-indigo"></i>
                                 </span>
-                                <span class="hide-menu ms-2 ps-1">Products</span>
+                                <span class="hide-menu ms-2 ps-1">Product list</span>
                             </a>
                         </li>
                         <li class="nav-small-cap">

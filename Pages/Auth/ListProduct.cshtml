@@ -32,13 +32,14 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-body mb-3">
-                <a asp-area="" asp-page="/Auth/AddProduct" class="btn btn-success">Add Product</a>
                 <form method="post" action="/Auth/Order">
-                    <div class="mb-3">
-                        <label for="barcode" class="form-label">Enter Barcode:</label>
-                        <input type="text" class="form-control" id="barcode" name="barcode">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="form-group w-100 me-3">
+                           @*  <label for="barcode" class="form-label">Enter Barcode:</label> *@
+                            <input type="text" class="form-control" id="barcode" name="barcode" placeholder="Enter product barcode">
+                        </div>
+                        <button type="submit" style="min-width: max-content;" class="btn btn-primary">Add by Barcode</button>
                     </div>
-                    <button type="submit" class="btn btn-primary">Add by Barcode</button>
                 </form>
             </div>
 
@@ -53,7 +54,7 @@
                                     <img src="@Url.Content(product.Photo)" alt="@product.ProductName" class="product-img" data-product-id="@product.Id" data-product-name="@product.ProductName" data-product-description="@product.Description" data-product-retail-price="@product.RetailPrice" data-product-img="@Url.Content(product.Photo)" data-bs-toggle="modal" data-bs-target="#productModal">
                                     <div class="card-body">
                                         <h5 class="card-title">@product.ProductName</h5>
-                                        <p class="card-text">Giá bán lẻ: @product.RetailPrice</p>
+                                        <p class="card-text">Price: @product.RetailPrice</p>
                                         <div class="d-flex justify-content-end gap-2">
                                             <a asp-page="Order" asp-page-handler="Buynow" asp-route-id="@product.Id" class="btn btn-primary">Choose</a>
                                             <a asp-area="" asp-page="/Auth/EditProduct" asp-route-id="@product.Id" class="btn btn-outline-primary">Edit</a>

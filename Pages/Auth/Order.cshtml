@@ -57,7 +57,7 @@
                                                         <tr>
                                                             <td class="border-bottom-0">
                                                                 <div class="d-flex align-items-center gap-3">
-                                                                    <img src="~/images/product/@Model.CartItems[i].Product.Photo" alt="" class="img-fluid rounded" width="80">
+                                                                    <img src="@Model.CartItems[i].Product.Photo" alt="" class="img-fluid rounded" height="80" width="80">
                                                                     <div>
                                                                         <h6 class="fw-semibold fs-4 mb-0">@Model.CartItems[i].Product.ProductName</h6>
                                                                         <a asp-page="Cart" asp-page-handler="Delete" asp-route-id="@Model.CartItems[i].Product.Id"><i class="ti ti-trash"></i></a>
