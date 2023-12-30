@@ -53,19 +53,17 @@ namespace POSWebsite.Pages.HeadQuarter
                 Staff? staff = _dbContext.Staff.Where(s => s.Email == claims.Value).FirstOrDefault();
                 if (staff != null)
                 {
-                    List<BranchStore> branchStore = _dbContext.BranchStore.Select(branch => branch).ToList();
-                    List<Staff> staffList = new List<Staff>();
-                    foreach (BranchStore branch in branchStore)
+                    List<Staff> staffList = _dbContext.Staff.Select(s => s).ToList();
+                    BranchStore? branch;
+                    foreach (Staff staffAtStore in staffList)
                     {
-                        staffList = _dbContext.Staff.Where(s => s.BranchStoreId == branch.Id).ToList();
-                        foreach (Staff staffAtStore in staffList)
+                        Account? account = _dbContext.Account.Where(s => s.Email == staffAtStore.Email).FirstOrDefault();
+                        branch = _dbContext.BranchStore.Where(b => b.Id == staffAtStore.BranchStoreId).FirstOrDefault();
+
+                        if (account != null && account.Roles.Contains("Manager") && branch != null)
                         {
-                            Account? account = _dbContext.Account.Where(s => s.Email == staffAtStore.Email).FirstOrDefault();
-                            if (account != null && account.Roles.Contains("Manager"))
-                            {
-                                _staffListAtStore.Add(
-                                new StaffInfoHolder() { StaffInfo = staffAtStore, AccountInfo = account, BranchStoreInfo = branch });
-                            }
+                            _staffListAtStore.Add(
+                            new StaffInfoHolder() { StaffInfo = staffAtStore, AccountInfo = account, BranchStoreInfo = branch });
                         }
                     }
                     _curStaff = staff;
